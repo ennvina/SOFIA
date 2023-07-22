@@ -1,0 +1,28 @@
+## SOFIA Changelog
+
+#### v0.1.0-alpha (2023-07-22)
+
+- Public repository on GitHub
+- Code cleanup to go public
+- This code can be seen as an example of a 'minimal addon with one window'
+
+#### v0.0.5-alpha (2023-07-22)
+
+- Packaging script
+
+#### v0.0.4-alpha (2023-07-21)
+
+- Console commands: show, hide, toggle, reset
+
+#### v0.0.3-alpha (2023-07-21)
+
+- Windowing system, movable and resizable
+- Window settings are saved in the database
+
+#### v0.0.2-alpha (2023-07-21)
+
+- Load and save database, account-wide
+
+#### v0.0.1-alpha (2023-07-21)
+
+- Code base, with no functionality
