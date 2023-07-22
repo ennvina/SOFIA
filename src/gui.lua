@@ -13,7 +13,7 @@ function SOFIA.getWindowConfig(self)
 end
 
 local function createMainFrame()
-    local mainFrame = CreateFrame("Frame", 'SofiaMainFrame', UIParent)
+    local mainFrame = CreateFrame("Frame", AddonName..'_MainFrame', UIParent)
 
     mainFrame:EnableMouse(true)
     mainFrame:SetMovable(true)
@@ -39,8 +39,7 @@ end
 
 -- Create title frame
 local function createTitleFrame(baseFrame, subtitle)
-    local frameName = 'titleFrame'
-    local titleFrame = CreateFrame("Frame", frameName, baseFrame)
+    local titleFrame = CreateFrame("Frame", AddonName..'_TitleFrame', baseFrame)
     local constants = SOFIA.constants.title
 
     titleFrame:SetPoint('TOPLEFT')
@@ -68,13 +67,13 @@ local function createTitleFrame(baseFrame, subtitle)
         titleFrame.text:SetShadowOffset(1,-1)
     end
 
-    baseFrame[frameName] = titleFrame
+    baseFrame.titleFrame = titleFrame
     return titleFrame
 end
 
 local function createButton(baseFrame, position, texture, callback, texCoord, tooltip)
-
     local button = CreateFrame("Button", nil, baseFrame)
+
     button:SetPoint('RIGHT', -position, 0)
     button:SetWidth(14)
     button:SetHeight(14)
@@ -156,8 +155,7 @@ end
 
 -- Create background frame
 local function createBackgroundFrame(baseFrame, offsetY)
-    local frameName = 'backgroundFrame'
-    local backgroundFrame = CreateFrame("Frame", frameName, baseFrame)
+    local backgroundFrame = CreateFrame("Frame", AddonName..'_BackgroundFrame', baseFrame)
 
     backgroundFrame:SetPoint('LEFT')
     backgroundFrame:SetPoint('RIGHT')
@@ -168,7 +166,7 @@ local function createBackgroundFrame(baseFrame, offsetY)
     backgroundFrame.texture:SetColorTexture(0,0,0,0.5)
     backgroundFrame.texture:SetAllPoints()
 
-    baseFrame[frameName] = backgroundFrame
+    baseFrame.bgFrame = backgroundFrame
     return backgroundFrame
 end
 
@@ -176,7 +174,7 @@ end
 local function createCornerResizer(baseFrame)
     baseFrame:SetResizable(true)
 
-    local resizer = CreateFrame("Button", nil, baseFrame, "PanelResizeButtonTemplate")
+    local resizer = CreateFrame("Button", AddonName..'_ResizerFrame', baseFrame, "PanelResizeButtonTemplate")
 
     resizer:SetPoint("BOTTOMRIGHT")
 
@@ -189,11 +187,7 @@ local function createCornerResizer(baseFrame)
         config.height = frame:GetHeight()
     end)
 
-    if not baseFrame.resizers then
-        baseFrame.resizers = { ["BOTTOMRIGHT"] = resizer }
-    else
-        baseFrame.resizers["BOTTOMRIGHT"] = resizer
-    end
+    baseFrame.resizer = resizer
     return resizer
 end
 
