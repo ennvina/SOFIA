@@ -62,7 +62,15 @@ end
 -- Utility function to update a field
 local function UpdateField(player, field, value, participle, updated)
     if participle then -- Passing no participle means we don't want to spam
-        SOFIA:Debug("%s %s from '%s' to '%s'.", tostring(player.name), participle, tostring(player[field]), tostring(value))
+        local before, after = tostring(player[field]), tostring(value)
+        if field == 'dead' then
+            before, after = before == 'true' and 'dead' or 'alive', after == 'true' and 'dead' or 'alive'
+        end
+        local pattern = "%s %s from %s to %s."
+        if type(player[field]) == 'string' or type(value) == 'string' then
+            pattern = "%s %s from '%s' to '%s'."
+        end
+        SOFIA:Debug(pattern, tostring(player.name), participle, before, after)
     end
     player[field] = value
     updated.something = true
