@@ -1,10 +1,10 @@
 local AddonName, SOFIA = ...
 
-function SOFIA:getWindow()
+function SOFIA:GetWindow()
     return self and self.window or SOFIA.window
 end
 
-function SOFIA:getWindowConfig()
+function SOFIA:GetWindowConfig()
     if self then
         return self.db and self.db.window or nil
     else
@@ -27,7 +27,7 @@ local function createMainFrame()
         function()
             mainFrame:StopMovingOrSizing()
 
-            local config = SOFIA:getWindowConfig()
+            local config = SOFIA:GetWindowConfig()
             config.point = 'TOPLEFT'
             config.y = mainFrame:GetTop()
             config.x = mainFrame:GetLeft()
@@ -133,7 +133,7 @@ local function createTitleButtons(baseFrame)
                 pushed = 'Interface/Buttons/UI-Panel-MinimizeButton-Down',
                 highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
             },
-            callback = SOFIA.HideWindow,
+            callback = function() SOFIA:HideWindow() end,
             texCoord = {0.08, 0.9, 0.1, 0.9},
             -- tooltip = CLOSE, -- No need a tooltip, everyone knows what a close button is
         },
@@ -182,7 +182,7 @@ local function createCornerResizer(baseFrame)
     resizer:Init(baseFrame, constraints.minWidth, constraints.minHeight, constraints.maxWidth, constraints.maxHeight)
 
     resizer:SetOnResizeStoppedCallback(function(frame)
-        local config = SOFIA:getWindowConfig()
+        local config = SOFIA:GetWindowConfig()
         config.width = frame:GetWidth()
         config.height = frame:GetHeight()
     end)
@@ -210,11 +210,11 @@ function SOFIA:CreateWindow()
 end
 
 function SOFIA:ShowWindow()
-    local config = self:getWindowConfig()
+    local config = self:GetWindowConfig()
 
     config.visible = true
 
-    local window = self:getWindow()
+    local window = self:GetWindow()
     if window then
         window:Show()
         self:RefreshTagPool()
@@ -222,18 +222,18 @@ function SOFIA:ShowWindow()
 end
 
 function SOFIA:HideWindow()
-    local config = self:getWindowConfig()
+    local config = self:GetWindowConfig()
 
     config.visible = false
 
-    local window = self:getWindow()
+    local window = self:GetWindow()
     if window then
         window:Hide()
     end
 end
 
 function SOFIA:ToggleWindow()
-    local config = self:getWindowConfig()
+    local config = self:GetWindowConfig()
 
     local visible
     if config then
@@ -243,7 +243,7 @@ function SOFIA:ToggleWindow()
         visible = true
     end
 
-    local window = self:getWindow()
+    local window = self:GetWindow()
     if window then
         window:SetShown(visible)
         if visible then
@@ -253,8 +253,8 @@ function SOFIA:ToggleWindow()
 end
 
 function SOFIA:ApplyWindowSettings()
-    local mainFrame = self:getWindow()
-    local config = self:getWindowConfig()
+    local mainFrame = self:GetWindow()
+    local config = self:GetWindowConfig()
 
     if not mainFrame or not config then
         return
