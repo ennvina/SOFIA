@@ -34,15 +34,20 @@ SOFIA.defaults = {
         point = 'TOPLEFT', x = 350, y = 700,
         width = 150, height = 350,
     },
+    roster = {},
 }
 
 -- Load database and use default values if needed
 function SOFIA.LoadDB(self)
-    local currentversion = 010
+    local currentversion = 020
     local db = SOFIADB or {}
 
     if not db.window then
         db.window = self.defaults.window
+    end
+
+    if not db.roster then
+        db.roster = self.defaults.roster
     end
 
     db.version = currentversion
@@ -53,15 +58,17 @@ end
 -- Apply all settings after loading or on-the-fly
 function SOFIA.ApplySettings(self)
     self:ApplyWindowSettings(self.db.window)
+    self:ApplyRosterSettings(self.db.roster)
 end
 
 -- Utility frame dedicated to react to variable loading
-local loader = CreateFrame("Frame", "SOFIADBLoader");
-loader:RegisterEvent("VARIABLES_LOADED");
+local loader = CreateFrame("Frame", AddonName.."_DBLoader")
+loader:RegisterEvent("VARIABLES_LOADED")
 loader:SetScript("OnEvent", function (event)
     SOFIA:LoadDB()
     SOFIA:CreateWindow() -- Good practice to create window when variables are loaded, to avoid clunky behavior
     SOFIA:ApplySettings()
---    SOFIAOptionsPanel_Init(SOFIA.OptionsPanel);
-    loader:UnregisterEvent("VARIABLES_LOADED");
-end);
+    SOFIA:StartRosterTimer() -- Good practice to query roster information only when roster is linked to db
+--    SOFIAOptionsPanel_Init(SOFIA.OptionsPanel)
+    loader:UnregisterEvent("VARIABLES_LOADED")
+end)

@@ -10,6 +10,19 @@
         "WrapTextInColorCode",
         "GetClassColor",
         "GameTooltip",
-        "GameTooltip_SetTitle"
+        "GameTooltip_SetTitle",
+        "GetServerTime",
+        "UnitGUID",
+        "UnitName",
+        "UnitClass",
+        "UnitLevel",
+        "UnitXP",
+        "UnitXPMax",
+        "UnitIsDeadOrGhost",
+        "GetGuildRosterInfo",
+        "C_GuildInfo",
+        "GetRealmName",
+        "GetGuildInfo",
+        "C_Timer"
     ]
 }
