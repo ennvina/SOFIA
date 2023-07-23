@@ -54,7 +54,7 @@ local function createTitleFrame(baseFrame, subtitle)
     local fgColor = SOFIA:GetColor(constants.fgColor)
     titleFrame.text = titleFrame:CreateFontString(nil, "ARTWORK")
     titleFrame.text:SetFont(constants.fontFace, constants.fontSize)
-    titleFrame.text:SetPoint("LEFT",5,0)
+    titleFrame.text:SetPoint("LEFT", constants.marginLeft, 0)
     if subtitle then
         titleFrame.text:SetText(string.format('%s - %s', AddonName, subtitle))
     else

@@ -37,8 +37,17 @@ SOFIA.constants = {
         bgColor = 'darkRed',
         fgColor = 'black',
         barHeight = 18,
+        marginLeft = 5,
         fontFace = "Fonts\\ARIALN.ttf",
         fontSize = 12,
+    },
+
+    tag = {
+        height = 18,
+        marginLeft = 5,
+        fontFace = "GameFontNormal",
+        fontSize = 12,
+        fgColor = 'white',
     },
 }
 function SOFIA:GetConstants(tag)
