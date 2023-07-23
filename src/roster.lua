@@ -106,8 +106,10 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
         -- When the level changes, update it and remember when it happened
         UpdateField(player, 'level', level, 'leveled up', updated)
         player.lastLevelUp = time -- Overwrite lastLevelUp, but do not advertise it
+        player.progress = -1 -- Progress is unknown upon level up; may be overwritten below
+        updated.progress = true -- Also tell progress gets updated, silently
     end
-    if progress ~= player.progress then -- Player sub-level may change frequently
+    if progress ~= player.progress and progress >= 0 then -- Player sub-level may change frequently
         UpdateField(player, 'progress', progress, nil, updated)
     end
 
@@ -169,7 +171,7 @@ end
 -- - lastLevelUp can be guessed when level gets updated
 -- - lastSeen is always updated
 function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progress, dead)
-    if not progress then progress = 0 end -- Unknown progress is 0. Maybe we can do better
+    if not progress then progress = -1 end -- Unknown progress is -1 to tell "I don't know"
     if type(dead) ~= 'boolean' then dead = false end
 
     local location = roster._whereis[guid]
