@@ -62,7 +62,7 @@ end
 -- Utility function to update a field
 local function UpdateField(player, field, value, participle, updated)
     if participle then -- Passing no participle means we don't want to spam
-        SOFIA:Debug("%s %s from '%s' to '%s'.", player.name, participle, tostring(player[field]), tostring(value))
+        SOFIA:Debug("%s %s from '%s' to '%s'.", tostring(player.name), participle, tostring(player[field]), tostring(value))
     end
     player[field] = value
     updated.something = true
@@ -169,6 +169,7 @@ local function UpdateAllGuild()
     local guild = select(1, GetGuildInfo("player"))
     for i=1, GetNumGuildMembers() do
         local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
+        name = select(1,strsplit("-", name))
         local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
     end
 end
