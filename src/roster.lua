@@ -187,6 +187,12 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
                 self:Debug("The player is nowhere to be found, a new one will be created.")
                 roster._whereis[guid] = nil
             end
+        elseif roster[location.realm]
+           and roster[location.realm][location.guild]
+           and roster[location.realm][location.guild][guid]
+           and (roster[location.realm][location.guild][guid].realm ~= location.realm
+             or roster[location.realm][location.guild][guid].guild ~= location.guild) then
+             SOFIA:Debug("%s location is not synchronized with its actual realm and guild.", guid)
         end
     end
     if location then
@@ -210,10 +216,18 @@ end
 local function UpdateAllGuild()
     if not IsInGuild() then return end -- Very unlikely, may happen if quitting guild during update?
 
-    local realm = GetRealmName()
-    local guild = select(1, GetGuildInfo("player"))
+    local realm = GetRealmName() or ""
+    local guild = select(1, GetGuildInfo("player")) or ""
+    local nbGuildmates = GetNumGuildMembers() or 0
+
+    if realm == "" or guild == "" or nbGuildmates == 0 then
+        -- Wrong init, try again later
+        SOFIA:Debug("Cannot update guild status right now, will try again in a few seconds.")
+        return
+    end
+
     local guildmates = {} -- Gather GUIDs of guildmates currently in the guild
-    for i=1, GetNumGuildMembers() do
+    for i=1, nbGuildmates do
         local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
         name = select(1,strsplit("-", name))
         guildmates[guid] = true
@@ -224,19 +238,18 @@ local function UpdateAllGuild()
     end
 
     -- Check who left guild
-    if realm and guild and guild ~= "" then
-        local leavers = {}
-        for guid, player in pairs(roster[realm][guild]) do
-            if not guildmates[guid] then
-                SOFIA:Debug("%s left guild '%s'.", player.name, guild)
-                table.insert(leavers, player)
-            end
+    local leavers = {}
+    for guid, player in pairs(roster[realm][guild]) do
+        if not guildmates[guid] then
+            SOFIA:Debug("%s left guild '%s'.", player.name, guild)
+            table.insert(leavers, player)
         end
-        for _, player in ipairs(leavers) do
-            -- Put the player in the 'guildless' guild by default
-            -- Maybe we'll cross the player again someday and the guild will be updated
-            RelocatePlayer(player, realm, guild, realm, "")
-        end
+    end
+    for _, player in ipairs(leavers) do
+        -- Put the player in the 'guildless' guild by default
+        -- Maybe we'll cross the player again someday and the guild will be updated
+        player.guild = ""
+        RelocatePlayer(player, realm, guild, realm, "")
     end
 end
 
