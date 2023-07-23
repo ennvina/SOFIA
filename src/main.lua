@@ -8,7 +8,7 @@ SlashCmdList.SOFIA = function(msg, editBox)
         SOFIADB = nil -- reset to nothing
         SOFIA:LoadDB() -- because DB has nothing, loading will set it to default
         SOFIA:ApplySettings()
-        print(WrapTextInColorCode(string.format("%s options have been reset.", AddonName), color))
+        print(WrapTextInColorCode(string.format("%s options and data have been reset.", AddonName), color))
     elseif msg == "show" then
         SOFIA:ShowWindow()
         print(WrapTextInColorCode(string.format("%s window shown. If you still don't see it, please try /sofia reset", AddonName), color))
@@ -24,6 +24,6 @@ SlashCmdList.SOFIA = function(msg, editBox)
             "Commands:\n"..
             "show: show the window\n"..
             "hide: hide the window\n"..
-            "reset: reset to default settings\n", color))
+            "reset: reset to default settings and wipe all data\n", color))
     end
 end
