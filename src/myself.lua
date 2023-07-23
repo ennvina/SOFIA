@@ -26,7 +26,7 @@ end
 
 local myselfTimerFrame = CreateFrame("Frame", AddonName.."_MyselfTimer")
 
-function SOFIA.StartMyselfTimer(self)
+function SOFIA:StartMyselfTimer()
     myselfTimerFrame:RegisterEvent("UNIT_HEALTH")
     myselfTimerFrame:RegisterEvent("PLAYER_XP_UPDATE")
     myselfTimerFrame:RegisterEvent("PLAYER_GUILD_UPDATE")

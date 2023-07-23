@@ -6,7 +6,7 @@ local GetServerTime = GetServerTime
 -- List of players; will be synchronized with db during ApplyRosterSettings
 local roster = {}
 
-function SOFIA.GetRoster(self, realm, guild)
+function SOFIA:GetRoster(realm, guild)
     if realm == '_whereis' then
         self:Debug("Invalid real name '%s'.", realm)
     end
@@ -144,7 +144,7 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
     return player, updated
 end
 
-function SOFIA.StorePlayerLocation(self, player, realm, guild)
+function SOFIA:StorePlayerLocation(player, realm, guild)
     local location = { realm = realm or "", guild = guild or "" }
     roster._whereis[player.guid] = location
 
@@ -159,7 +159,7 @@ function SOFIA.StorePlayerLocation(self, player, realm, guild)
     roster[location.realm][location.guild][player.guid] = player
 end
 
-function SOFIA.RelocatePlayer(self, player, fromRealm, fromGuild, toRealm, toGuild)
+function SOFIA:RelocatePlayer(player, fromRealm, fromGuild, toRealm, toGuild)
     roster[fromRealm or ""][fromGuild or ""][player.guid] = nil
     self:StorePlayerLocation(player, toRealm, toGuild)
     if (fromRealm or "") ~= toRealm then
@@ -170,7 +170,7 @@ function SOFIA.RelocatePlayer(self, player, fromRealm, fromGuild, toRealm, toGui
     end
 end
 
-function SOFIA.FindPlayerByGUID(self, guid)
+function SOFIA:FindPlayerByGUID(guid)
     for realm, realmData in pairs(roster) do
         if realm ~= '_whereis' then
             for guild, guildData in pairs(realmData) do
@@ -188,7 +188,7 @@ end
 -- Do not tell when times (lastLevelUp or lastSeen) have been updated, because:
 -- - lastLevelUp can be guessed when level gets updated
 -- - lastSeen is always updated
-function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progress, dead)
+function SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
     if not realm then realm = "" end
     if not guild then guild = "" end
     if not progress then progress = -1 end -- Unknown progress is -1 to tell "I don't know"
@@ -237,6 +237,6 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
     end
 end
 
-function SOFIA.ApplyRosterSettings(self, _roster)
+function SOFIA:ApplyRosterSettings(_roster)
     roster = _roster
 end

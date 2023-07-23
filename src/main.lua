@@ -12,12 +12,12 @@ local function printChat(pattern, ...)
     printColor(color, pattern, ...)
 end
 
-function SOFIA.Error(self, pattern, ...)
+function SOFIA:Error(pattern, ...)
     local hcColor = "FFB20000" -- Do not fetch from SOFIA:GetColorHex to minimize calls during errors
     print(string.format('|c%s%s|r: '..pattern, hcColor, AddonName, unpack{...}))
 end
 
-function SOFIA.Debug(self, pattern, ...)
+function SOFIA:Debug(pattern, ...)
     if not self.db or not self.db.debug then return end
 
     local hcColor = "FFB20000" -- Do not fetch from SOFIA:GetColorHex to minimize calls during debug
@@ -50,7 +50,7 @@ SlashCmdList.SOFIA = function(msg, editBox)
     end
 end
 
-function SOFIA.ToggleDebug(self)
+function SOFIA:ToggleDebug()
     local color = SOFIA:GetColorHex('chat')
     if not self.db then
         printChat("DB not initialized yet.")

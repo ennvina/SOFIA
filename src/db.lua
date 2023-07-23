@@ -10,7 +10,7 @@ SOFIA.colors = {
 
     ['chat']        = CreateColor(1, 0.8, 0.8),
 }
-function SOFIA.GetColor(self, name)
+function SOFIA:GetColor(name)
     local color = self.colors[name]
     if color then
         return color
@@ -20,7 +20,7 @@ function SOFIA.GetColor(self, name)
         return CreateColor(1,0,1)
     end
 end
-function SOFIA.GetColorHex(self, name)
+function SOFIA:GetColorHex(name)
     return self:GetColor(name):GenerateHexColor()
 end
 
@@ -41,7 +41,7 @@ SOFIA.constants = {
         fontSize = 12,
     },
 }
-function SOFIA.GetConstants(self, tag)
+function SOFIA:GetConstants(tag)
     local constants = self.constants[tag]
     if constants then
         return constants
@@ -70,7 +70,7 @@ SOFIA.defaults = {
 }
 
 -- Load database and use default values if needed
-function SOFIA.LoadDB(self)
+function SOFIA:LoadDB()
     local currentversion = 020
     local db = SOFIADB or {}
 
@@ -92,7 +92,7 @@ function SOFIA.LoadDB(self)
 end
 
 -- Apply all settings after loading or on-the-fly
-function SOFIA.ApplySettings(self)
+function SOFIA:ApplySettings()
     self:ApplyWindowSettings(self.db.window)
     self:ApplyRosterSettings(self.db.roster)
 end

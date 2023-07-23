@@ -44,7 +44,7 @@ end
 
 local guildTimerFrame = CreateFrame("Frame", AddonName.."_GuildTimer")
 
-function SOFIA.StartGuildTimer(self)
+function SOFIA:StartGuildTimer()
     guildTimerFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
     guildTimerFrame:SetScript("OnEvent", UpdateAllGuild)
 

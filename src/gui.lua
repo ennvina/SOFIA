@@ -1,10 +1,10 @@
 local AddonName, SOFIA = ...
 
-function SOFIA.getWindow(self)
+function SOFIA:getWindow()
     return self and self.window or SOFIA.window
 end
 
-function SOFIA.getWindowConfig(self)
+function SOFIA:getWindowConfig()
     if self then
         return self.db and self.db.window or nil
     else
@@ -192,7 +192,7 @@ local function createCornerResizer(baseFrame)
 end
 
 -- Create main window
-function SOFIA.CreateWindow(self)
+function SOFIA:CreateWindow()
     local window = createMainFrame()
     self.window = window
 
@@ -203,7 +203,7 @@ function SOFIA.CreateWindow(self)
     createCornerResizer(window)
 end
 
-function SOFIA.ShowWindow(self)
+function SOFIA:ShowWindow()
     local config = self:getWindowConfig()
 
     config.visible = true
@@ -214,7 +214,7 @@ function SOFIA.ShowWindow(self)
     end
 end
 
-function SOFIA.HideWindow(self)
+function SOFIA:HideWindow()
     local config = self:getWindowConfig()
 
     config.visible = false
@@ -225,7 +225,7 @@ function SOFIA.HideWindow(self)
     end
 end
 
-function SOFIA.ToggleWindow(self)
+function SOFIA:ToggleWindow()
     local config = self:getWindowConfig()
 
     local visible
@@ -242,7 +242,7 @@ function SOFIA.ToggleWindow(self)
     end
 end
 
-function SOFIA.ApplyWindowSettings(self)
+function SOFIA:ApplyWindowSettings()
     local mainFrame = self:getWindow()
     local config = self:getWindowConfig()
 
