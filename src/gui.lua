@@ -185,6 +185,9 @@ local function createCornerResizer(baseFrame)
         local config = SOFIA:getWindowConfig()
         config.width = frame:GetWidth()
         config.height = frame:GetHeight()
+    end)
+
+    baseFrame:SetScript("OnSizeChanged", function()
         if baseFrame:IsShown() then
             SOFIA:RefreshTagPool()
         end
