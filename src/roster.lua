@@ -142,6 +142,25 @@ end
 local function RelocatePlayer(player, fromRealm, fromGuild, toRealm, toGuild)
     roster[fromRealm or ""][fromGuild or ""][player.guid] = nil
     StorePlayerLocation(player, toRealm, toGuild)
+    if (fromRealm or "") ~= toRealm then
+        SOFIA:Debug("Relocated %s from realm '%s' to '%s'.", player.name, fromRealm or "", toRealm)
+    end
+    if (fromGuild or "") ~= toGuild then
+        SOFIA:Debug("Relocated %s from guild '%s' to '%s'.", player.name, fromGuild or "", toGuild)
+    end
+end
+
+function SOFIA.FindPlayerByGUID(self, guid)
+    for realm, realmData in pairs(roster) do
+        if realm ~= '_whereis' then
+            for guild, guildData in pairs(realmData) do
+                if guildData[guid] then
+                    return { realm = realm, guild = guild }
+                end
+            end
+        end
+    end
+    return nil
 end
 
 -- Add or update player info
@@ -155,11 +174,27 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
 
     local location = roster._whereis[guid]
     if location then
+        -- Check integrity of _whereis
+        if not roster[location.realm]
+        or not roster[location.realm][location.guild]
+        or not roster[location.realm][location.guild][guid] then
+            self:Debug("%s not found in realm '%s' in guild '%s'.", guid, location.realm, location.guild)
+            location = self:FindPlayerByGUID(guid)
+            if location then
+                self:Debug("%s was in fact in realm '%s' in guild '%s'.", guid, location.realm, location.guild)
+                roster._whereis[guid] = location
+            else
+                self:Debug("The player is nowhere to be found, a new one will be created.")
+                roster._whereis[guid] = nil
+            end
+        end
+    end
+    if location then
         -- Player known: update
         local player = roster[location.realm][location.guild][guid]
         local _, updated = UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
         -- Move player if realm or guild has changed
-        if realm ~= location.realm or guild ~= location.guild then
+        if ((realm or "") ~= location.realm) or ((guild or "") ~= location.guild) then
             RelocatePlayer(player, location.realm, location.guild, realm, guild)
         end
         return false, updated
