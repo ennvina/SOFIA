@@ -7,7 +7,22 @@ SOFIA.colors = {
 
     ['hcRed']       = CreateColor(1, 0, 0),
     ['darkRed']     = CreateColor(0.7, 0, 0),
+
+    ['chat']        = CreateColor(1, 0.8, 0.8),
 }
+function SOFIA.GetColor(self, name)
+    local color = self.colors[name]
+    if color then
+        return color
+    else
+        self:Error("Unknown color '%s'.", name)
+        -- Return very flashy color to make it stand out as 'hey, this is not normal'
+        return CreateColor(1,0,1)
+    end
+end
+function SOFIA.GetColorHex(self, name)
+    return self:GetColor(name):GenerateHexColor()
+end
 
 -- Global constants, not saved in db
 SOFIA.constants = {
@@ -26,6 +41,15 @@ SOFIA.constants = {
         fontSize = 12,
     },
 }
+function SOFIA.GetConstants(self, tag)
+    local constants = self.constants[tag]
+    if constants then
+        return constants
+    else
+        self:Error("Unknown constant tag '%s'.", tag)
+        return {}
+    end
+end
 
 -- Values for ver first loading, or for resetting
 SOFIA.defaults = {

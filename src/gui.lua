@@ -40,18 +40,18 @@ end
 -- Create title frame
 local function createTitleFrame(baseFrame, subtitle)
     local titleFrame = CreateFrame("Frame", AddonName..'_TitleFrame', baseFrame)
-    local constants = SOFIA.constants.title
+    local constants = SOFIA:GetConstants('title')
 
     titleFrame:SetPoint('TOPLEFT')
     titleFrame:SetPoint('TOPRIGHT')
     titleFrame:SetHeight(constants.barHeight)
 
-    local bgColor = SOFIA.colors[constants.bgColor]
+    local bgColor = SOFIA:GetColor(constants.bgColor)
     titleFrame.texture = titleFrame:CreateTexture(nil, "BACKGROUND")
     titleFrame.texture:SetColorTexture(bgColor:GetRGB())
     titleFrame.texture:SetAllPoints()
 
-    local fgColor = SOFIA.colors[constants.fgColor]
+    local fgColor = SOFIA:GetColor(constants.fgColor)
     titleFrame.text = titleFrame:CreateFontString(nil, "ARTWORK")
     titleFrame.text:SetFont(constants.fontFace, constants.fontSize)
     titleFrame.text:SetPoint("LEFT",5,0)
@@ -178,7 +178,7 @@ local function createCornerResizer(baseFrame)
 
     resizer:SetPoint("BOTTOMRIGHT")
 
-    local constraints = SOFIA.constants.constraints
+    local constraints = SOFIA:GetConstants('constraints')
     resizer:Init(baseFrame, constraints.minWidth, constraints.minHeight, constraints.maxWidth, constraints.maxHeight)
 
     resizer:SetOnResizeStoppedCallback(function(frame)
