@@ -59,10 +59,14 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
     return player, updated
 end
 
--- Utility function to set that something was updated
-local function Updating(updated, what)
+-- Utility function to update a field
+local function UpdateField(player, field, value, participle, updated)
+    if participle then -- Passing no participle means we don't want to spam
+        SOFIA:Debug("%s %s from '%s' to '%s'.", player.name, participle, tostring(player[field]), tostring(value))
+    end
+    player[field] = value
     updated.something = true
-    updated[what] = true
+    updated[field] = true
 end
 
 -- Update a player, return it and return what was updated in the player
@@ -77,38 +81,32 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
     -- Intrinsics
     -- player.guid = guid -- GUID cannot change, because GUID defines player entry in table
     if realm ~= player.realm then -- Player may transfer to a new realm
-        player.realm = realm
-        Updating(updated, 'realm')
+        UpdateField(player, 'realm', realm, 'transferred', updated)
     end
     if name ~= player.name then -- Although exceptional, name may change
-        player.name = name
-        Updating(updated, 'name')
+        UpdateField(player, 'name', name, 'renamed', updated)
     end
     -- player.class = class -- Class cannot change in World of Warcraft
 
     -- Guild info
     if guild ~= player.guild then -- Player may change guild
-        player.guild = guild -- Player may change guild
-        Updating(updated, 'guild')
+        UpdateField(player, 'guild', guild, 'changed guild', updated)
     end
 
     -- Level
     if level ~= player.level then -- Player may level up, obviously
         -- When the level changes, update it and remember when it happened
-        player.level = level
-        player.lastLevelUp = time
-        Updating(updated, 'level')
+        UpdateField(player, 'level', level, 'leveled up', updated)
+        player.lastLevelUp = time -- Overwrite lastLevelUp, but do not advertise it
     end
     if progress ~= player.progress then -- Player sub-level may change frequently
-        player.progress = progress
-        Updating(updated, 'progress')
+        UpdateField(player, 'progress', progress, nil, updated)
     end
 
     -- Death status
     if dead ~= player.dead then
         if not player.dead then -- Update death status only to kill, not to resurrect
-            player.dead = dead
-            Updating(updated, 'dead')
+            UpdateField(player, 'dead', dead, 'switched death', updated)
         end
     end
 
