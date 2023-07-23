@@ -173,12 +173,30 @@ end
 
 -- GetGuildRosterInfo() is available with new data
 local function UpdateAllGuild()
+    if not IsInGuild() then return end -- Very unlikely, may happen if quitting guild during update?
+
     local realm = GetRealmName()
     local guild = select(1, GetGuildInfo("player"))
+    local guildmates = {} -- Gather GUIDs of guildmates currently in the guild
     for i=1, GetNumGuildMembers() do
         local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
         name = select(1,strsplit("-", name))
+        guildmates[guid] = true
         local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
+        if whatChanged.guild then
+            SOFIA:Debug("%s joined guild '%s'.", name, guild)
+        end
+    end
+
+    -- Check who left guild
+    if realm and guild and guild ~= "" then
+        for guid, player in pairs(roster[realm][guild]) do
+            if not guildmates[guid] then
+                SOFIA:Debug("%s left guild '%s'.", player.name, guild)
+                roster[realm][guild] = nil
+                roster[realm][""] = player -- Put the player in the 'guildless' guild in the meantime
+            end
+        end
     end
 end
 

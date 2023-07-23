@@ -25,6 +25,7 @@
         "GetGuildInfo",
         "C_Timer",
         "GetNumGuildMembers",
-        "strsplit"
+        "strsplit",
+        "IsInGuild"
     ]
 }
