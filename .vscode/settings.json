@@ -26,6 +26,7 @@
         "C_Timer",
         "GetNumGuildMembers",
         "strsplit",
-        "IsInGuild"
+        "IsInGuild",
+        "UnitIsUnit"
     ]
 }

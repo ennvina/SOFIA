@@ -12,4 +12,5 @@
 src\db.lua
 src\gui.lua
 src\main.lua
+src\myself.lua
 src\roster.lua
