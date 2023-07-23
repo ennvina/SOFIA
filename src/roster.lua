@@ -6,10 +6,11 @@ local GetServerTime = GetServerTime
 -- List of players; will be synchronized with db during ApplyRosterSettings
 local roster = {}
 
+-- Create a new player, return it and return its update status
 local function CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
     local time = GetServerTime()
 
-    return {
+    local player = {
         -- Intrinsics
         guid = guid,
         realm = realm,
@@ -21,7 +22,7 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
 
         -- Level
         level = level,
-        levelProgress = progress,
+        progress = progress,
         lastLevelUp = time,
 
         -- Death status
@@ -30,40 +31,94 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
         -- "I was there"
         lastSeen = time,
     }
+
+    local updated = {
+        everything = true,
+        something = true,
+
+        -- Intrinsics
+        guid = true,
+        realm = true,
+        name = true,
+        class = true,
+
+        -- Guild info
+        guild = true,
+
+        -- Level
+        level = true,
+        progress = true,
+        -- Do not track 'lastLevelUp' updates, we know it gets updated alongside 'level'
+
+        -- Death status
+        dead = true,
+
+        -- Do not track 'lastSeen' updates, because it always gets updated
+    }
+
+    return player, updated
 end
 
+-- Utility function to set that something was updated
+local function Updating(updated, what)
+    updated.something = true
+    updated[what] = true
+end
+
+-- Update a player, return it and return what was updated in the player
 local function UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
     local time = GetServerTime()
 
+    local updated = {
+        everything = false, -- Cannot update everything because of immutable variables
+        something = false, -- For now, nothing has changed, but the function will tell
+    }
+
     -- Intrinsics
     -- player.guid = guid -- GUID cannot change, because GUID defines player entry in table
-    player.realm = realm -- Player may transfer to a new realm
-    player.name = name -- Although exceptional, name may change
+    if realm ~= player.realm then -- Player may transfer to a new realm
+        player.realm = realm
+        Updating(updated, 'realm')
+    end
+    if name ~= player.name then -- Although exceptional, name may change
+        player.name = name
+        Updating(updated, 'name')
+    end
     -- player.class = class -- Class cannot change in World of Warcraft
 
     -- Guild info
-    player.guild = guild -- Player may change guild
+    if guild ~= player.guild then -- Player may change guild
+        player.guild = guild -- Player may change guild
+        Updating(updated, 'guild')
+    end
 
     -- Level
-    if level ~= player.level then
+    if level ~= player.level then -- Player may level up, obviously
         -- When the level changes, update it and remember when it happened
         player.level = level
         player.lastLevelUp = time
+        Updating(updated, 'level')
     end
-    player.levelProgress = progress -- Level progress may change frequently
+    if progress ~= player.progress then -- Player sub-level may change frequently
+        player.progress = progress
+        Updating(updated, 'progress')
+    end
 
     -- Death status
-    if not player.dead then -- Update death only to kill, not to resurrect
-        player.dead = dead
+    if dead ~= player.dead then
+        if not player.dead then -- Update death status only to kill, not to resurrect
+            player.dead = dead
+            Updating(updated, 'dead')
+        end
     end
 
     -- "I was there"
     player.lastSeen = time
 
-    return player
+    return player, updated
 end
 
-local function StorePlayer(player, realm, guild)
+local function StorePlayerLocation(player, realm, guild)
     local location = { realm = realm or "", guild = guild or "" }
     roster._whereis[player.guid] = location
 
@@ -80,10 +135,14 @@ end
 
 local function RelocatePlayer(player, fromRealm, fromGuild, toRealm, toGuild)
     roster[fromRealm or ""][fromGuild or ""][player.guid] = nil
-    StorePlayer(player, toRealm, toGuild)
+    StorePlayerLocation(player, toRealm, toGuild)
 end
 
 -- Add or update player info
+-- Returns if player has been added, and which fields of player have been updated
+-- Do not tell when times (lastLevelUp or lastSeen) have been updated, because:
+-- - lastLevelUp can be guessed when level gets updated
+-- - lastSeen is always updated
 function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progress, dead)
     if not progress then progress = 0 end -- Unknown progress is 0. Maybe we can do better
     if type(dead) ~= 'boolean' then dead = false end
@@ -92,15 +151,17 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
     if location then
         -- Player known: update
         local player = roster[location.realm][location.guild][guid]
-        UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
-        -- Move player to if realm or guild has changed
+        local _, updated = UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
+        -- Move player if realm or guild has changed
         if realm ~= location.realm or guild ~= location.guild then
             RelocatePlayer(player, location.realm, location.guild, realm, guild)
         end
+        return false, updated
     else
         -- Player unknown yet: add
-        local player = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
-        StorePlayer(player, realm, guild)
+        local player, updated = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
+        StorePlayerLocation(player, realm, guild)
+        return true, updated
     end
 end
 
@@ -110,7 +171,7 @@ local function UpdateAllGuild()
     local guild = select(1, GetGuildInfo("player"))
     for i=1, GetNumGuildMembers() do
         local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
-        SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
+        local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
     end
 end
 
@@ -123,7 +184,7 @@ local function WhoAmI()
     local guild = select(1, GetGuildInfo("player")) -- Guild info
     local level, progress = UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil -- Level
     local dead = UnitIsDeadOrGhost("player") -- Death status
-    SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
+    local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
 end
 
 local rosterTimerFrame = CreateFrame("Frame", AddonName.."_RosterTimer")
