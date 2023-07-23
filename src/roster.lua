@@ -18,7 +18,6 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
 
         -- Guild info
         guild = guild,
-        guildless = not guild,
 
         -- Level
         level = level,
@@ -43,12 +42,7 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
     -- player.class = class -- Class cannot change in World of Warcraft
 
     -- Guild info
-    if guild then
-        player.guild = guild -- Player may change guild
-        player.guildless = false -- Player with a guild is, by definition, not guildless
-    else
-        player.guildless = true -- Know player left guild, but remember former guild name
-    end
+    player.guild = guild -- Player may change guild
 
     -- Level
     if level ~= player.level then
@@ -65,21 +59,48 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
 
     -- "I was there"
     player.lastSeen = time
+
+    return player
+end
+
+local function StorePlayer(player, realm, guild)
+    local location = { realm = realm or "", guild = guild or "" }
+    roster._whereis[player.guid] = location
+
+    if not roster[location.realm] then
+        roster[location.realm] = {}
+    end
+
+    if not roster[location.realm][location.guild] then
+        roster[location.realm][location.guild] = {}
+    end
+
+    roster[location.realm][location.guild][player.guid] = player
+end
+
+local function RelocatePlayer(player, fromRealm, fromGuild, toRealm, toGuild)
+    roster[fromRealm or ""][fromGuild or ""][player.guid] = nil
+    StorePlayer(player, toRealm, toGuild)
 end
 
 -- Add or update player info
 function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progress, dead)
-    if not progress then progress = 0 end
+    if not progress then progress = 0 end -- Unknown progress is 0. Maybe we can do better
     if type(dead) ~= 'boolean' then dead = false end
 
-    local player = roster[guid]
-    if player then
+    local location = roster._whereis[guid]
+    if location then
         -- Player known: update
+        local player = roster[location.realm][location.guild][guid]
         UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
+        -- Move player to if realm or guild has changed
+        if realm ~= location.realm or guild ~= location.guild then
+            RelocatePlayer(player, location.realm, location.guild, realm, guild)
+        end
     else
         -- Player unknown yet: add
-        player = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
-        roster[guid] = player
+        local player = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
+        StorePlayer(player, realm, guild)
     end
 end
 
@@ -91,10 +112,11 @@ end
 
 function SOFIA.ApplyRosterSettings(self, _roster)
     roster = _roster
+    print(UnitXP("player"),UnitXPMax("player"))
     self:SetPlayerInfo(
         UnitGUID("player"), GetRealmName(), UnitName("player"), select(2,UnitClass("player")), -- Intrinsics
         select(1, GetGuildInfo("player")), -- Guild info
-        UnitLevel("player"), UnitXP("player")/UnitXPMax("player"), -- Level
+        UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil, -- Level
         UnitIsDeadOrGhost("player") -- Death status
     )
 end

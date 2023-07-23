@@ -34,7 +34,9 @@ SOFIA.defaults = {
         point = 'TOPLEFT', x = 350, y = 700,
         width = 150, height = 350,
     },
-    roster = {},
+    roster = {
+        _whereis = {},
+    },
 }
 
 -- Load database and use default values if needed
