@@ -67,6 +67,13 @@ function SOFIA:RefreshTagPool()
     local tagHeight = self:GetConstants("tag").height
     local windowHeight = self.window:GetHeight()
     local nbTags = math.floor((windowHeight-titleHeight)/tagHeight)
+
+    if nbTags == self.window.nbTags then
+        -- Avoid heavy work when the number of tags doesn't change
+        return
+    end
+
     self:ReserveTagPool(self.window, nbTags)
     self:ShrinkToFit(self.window, nbTags)
+    self.window.nbTags = nbTags
 end
