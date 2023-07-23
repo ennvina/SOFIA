@@ -225,12 +225,17 @@ local function UpdateAllGuild()
 
     -- Check who left guild
     if realm and guild and guild ~= "" then
+        local leavers = {}
         for guid, player in pairs(roster[realm][guild]) do
             if not guildmates[guid] then
                 SOFIA:Debug("%s left guild '%s'.", player.name, guild)
-                roster[realm][guild] = nil
-                roster[realm][""] = player -- Put the player in the 'guildless' guild in the meantime
+                table.insert(leavers, player)
             end
+        end
+        for _, player in ipairs(leavers) do
+            -- Put the player in the 'guildless' guild by default
+            -- Maybe we'll cross the player again someday and the guild will be updated
+            RelocatePlayer(player, realm, guild, realm, "")
         end
     end
 end
