@@ -189,12 +189,15 @@ end
 -- - lastLevelUp can be guessed when level gets updated
 -- - lastSeen is always updated
 function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progress, dead)
+    if not realm then realm = "" end
+    if not guild then guild = "" end
     if not progress then progress = -1 end -- Unknown progress is -1 to tell "I don't know"
     if type(dead) ~= 'boolean' then dead = false end
 
     local location = roster._whereis[guid]
+
+    -- Check integrity of _whereis
     if location then
-        -- Check integrity of _whereis
         if not roster[location.realm]
         or not roster[location.realm][location.guild]
         or not roster[location.realm][location.guild][guid] then
@@ -215,17 +218,19 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
              SOFIA:Debug("%s location is not synchronized with its actual realm and guild.", guid)
         end
     end
+
+    -- Location tells whether the player already exists
     if location then
-        -- Player known: update
+        -- Has location: update the known player
         local player = roster[location.realm][location.guild][guid]
         local _, updated = UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
         -- Move player if realm or guild has changed
-        if ((realm or "") ~= location.realm) or ((guild or "") ~= location.guild) then
+        if realm ~= location.realm or guild ~= location.guild then
             self:RelocatePlayer(player, location.realm, location.guild, realm, guild)
         end
         return false, updated
     else
-        -- Player unknown yet: add
+        -- No location: add a new player
         local player, updated = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
         self:StorePlayerLocation(player, realm, guild)
         return true, updated
