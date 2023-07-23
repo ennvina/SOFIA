@@ -9,6 +9,8 @@ SOFIA.colors = {
     ['darkRed']     = CreateColor(0.7, 0, 0),
 
     ['chat']        = CreateColor(1, 0.8, 0.8),
+
+    ['flashy']      = CreateColor(1, 0, 1),
 }
 function SOFIA:GetColor(name)
     local color = self.colors[name]
@@ -43,10 +45,12 @@ SOFIA.constants = {
     },
 
     tag = {
-        height = 18,
+        height = 24,
+        border = 1,
         marginLeft = 5,
-        fontFace = "GameFontNormal",
-        fontSize = 12,
+        fontFace = "GameFontNormalLarge",
+        fontSize = 16,
+        bgColor = 'flashy', -- Flashy, for testing purposes
         fgColor = 'white',
     },
 }

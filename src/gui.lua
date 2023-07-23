@@ -163,7 +163,7 @@ local function createBackgroundFrame(baseFrame, offsetY)
     backgroundFrame:SetPoint('BOTTOM')
 
     backgroundFrame.texture = backgroundFrame:CreateTexture(nil, "BACKGROUND")
-    backgroundFrame.texture:SetColorTexture(0,0,0,0.5)
+    backgroundFrame.texture:SetColorTexture(0, 0, 0, 0.5)
     backgroundFrame.texture:SetAllPoints()
 
     baseFrame.bgFrame = backgroundFrame
@@ -185,6 +185,9 @@ local function createCornerResizer(baseFrame)
         local config = SOFIA:getWindowConfig()
         config.width = frame:GetWidth()
         config.height = frame:GetHeight()
+        if baseFrame:IsShown() then
+            SOFIA:RefreshTagPool()
+        end
     end)
 
     baseFrame.resizer = resizer
@@ -211,6 +214,7 @@ function SOFIA:ShowWindow()
     local window = self:getWindow()
     if window then
         window:Show()
+        self:RefreshTagPool()
     end
 end
 
@@ -239,6 +243,9 @@ function SOFIA:ToggleWindow()
     local window = self:getWindow()
     if window then
         window:SetShown(visible)
+        if visible then
+            self:RefreshTagPool()
+        end
     end
 end
 
@@ -259,4 +266,7 @@ function SOFIA:ApplyWindowSettings()
     mainFrame:SetWidth(config.width)
     mainFrame:SetHeight(config.height)
     mainFrame:SetShown(config.visible)
+    if config.visible then
+        self:RefreshTagPool()
+    end
 end

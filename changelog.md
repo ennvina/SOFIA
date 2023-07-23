@@ -1,5 +1,10 @@
 ## SOFIA Changelog
 
+#### v0.3.0-alpha (2023-07-23)
+
+- Ability to create name tags
+- Tags are allocated dynamically, based on window height
+
 #### v0.2.1-alpha (2023-07-23)
 
 - Fixed many issues when fetching guild info
