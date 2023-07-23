@@ -116,13 +116,14 @@ end
 
 function SOFIA.ApplyRosterSettings(self, _roster)
     roster = _roster
-    print(UnitXP("player"),UnitXPMax("player"))
-    self:SetPlayerInfo(
-        UnitGUID("player"), GetRealmName(), UnitName("player"), select(2,UnitClass("player")), -- Intrinsics
-        select(1, GetGuildInfo("player")), -- Guild info
-        UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil, -- Level
-        UnitIsDeadOrGhost("player") -- Death status
-    )
+end
+
+local function WhoAmI()
+    local guid, realm, name, class = UnitGUID("player"), GetRealmName(), UnitName("player"), select(2,UnitClass("player")) -- Intrinsics
+    local guild = select(1, GetGuildInfo("player")) -- Guild info
+    local level, progress = UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil -- Level
+    local dead = UnitIsDeadOrGhost("player") -- Death status
+    SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
 end
 
 local rosterTimerFrame = CreateFrame("Frame", AddonName.."_RosterTimer")
@@ -132,7 +133,13 @@ function SOFIA.StartRosterTimer(self)
     rosterTimerFrame:SetScript("OnEvent", UpdateAllGuild)
 
     -- Request guild info on a regular basis
-    C_GuildInfo.GuildRoster() -- Start requesting now
-    -- Then request every 11 secs (must be more than 10 secs)
+    -- Request every 11 secs (must be more than 10 secs)
     C_Timer.NewTicker(11, C_GuildInfo.GuildRoster)
+    -- C_GuildInfo.GuildRoster() -- Do not request now, because guild info is unlikely available at start
+
+    -- Request own info
+    -- Unlike guilds, the 10 secs threshold is not mandatory, but it's best no to query player info too often either
+    C_Timer.NewTicker(11, WhoAmI)
+
+    SOFIA:Debug("Started roster timers.")
 end

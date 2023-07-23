@@ -107,4 +107,5 @@ loader:SetScript("OnEvent", function (event)
     SOFIA:StartRosterTimer() -- Good practice to query roster information only when roster is linked to db
 --    SOFIAOptionsPanel_Init(SOFIA.OptionsPanel)
     loader:UnregisterEvent("VARIABLES_LOADED")
+    SOFIA:Debug("Variables loaded and applied.")
 end)
