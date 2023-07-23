@@ -23,6 +23,7 @@
         "C_GuildInfo",
         "GetRealmName",
         "GetGuildInfo",
-        "C_Timer"
+        "C_Timer",
+        "GetNumGuildMembers"
     ]
 }

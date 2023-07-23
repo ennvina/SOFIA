@@ -1,5 +1,10 @@
 ## SOFIA Changelog
 
+#### v0.2.0-alpha (2023-07-22)
+
+- System for storing character information
+- Currently gathering guild info and player info
+
 #### v0.1.0-alpha (2023-07-22)
 
 - Public repository on GitHub

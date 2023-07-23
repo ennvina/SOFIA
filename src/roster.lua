@@ -106,8 +106,12 @@ end
 
 -- GetGuildRosterInfo() is available with new data
 local function UpdateAllGuild()
-    print("Guild update arrived")
-    GetGuildRosterInfo()
+    local realm = GetRealmName()
+    local guild = select(1, GetGuildInfo("player"))
+    for i=1, GetNumGuildMembers() do
+        local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
+        SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
+    end
 end
 
 function SOFIA.ApplyRosterSettings(self, _roster)
