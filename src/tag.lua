@@ -33,6 +33,7 @@ function SOFIA:CreateTag(window)
     return tag
 end
 
+-- Reserve more tags in the pool if needed
 function SOFIA:ReserveTagPool(window, count)
     local nbAdded = 0
     while not window.tags or #window.tags < count do
@@ -41,6 +42,18 @@ function SOFIA:ReserveTagPool(window, count)
     end
     if nbAdded > 0 then
         self:Debug("Created %d tags in pool", nbAdded)
+    end
+end
+
+-- Show/hide extra tags in the pool
+function SOFIA:ShrinkToFit(window, count)
+    if not window.tags then
+        -- No tags, nothing to shrink
+        return
+    end
+
+    for i, tag in ipairs(window.tags) do
+        tag:SetShown(i <= count)
     end
 end
 
@@ -55,4 +68,5 @@ function SOFIA:RefreshTagPool()
     local windowHeight = self.window:GetHeight()
     local nbTags = math.floor((windowHeight-titleHeight)/tagHeight)
     self:ReserveTagPool(self.window, nbTags)
+    self:ShrinkToFit(self.window, nbTags)
 end
