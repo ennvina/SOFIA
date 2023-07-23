@@ -29,11 +29,17 @@ SOFIA.constants = {
 
 -- Values for ver first loading, or for resetting
 SOFIA.defaults = {
+    -- Debug option
+    debug = false,
+
+    -- Window settings
     window = {
         visible = true,
         point = 'TOPLEFT', x = 350, y = 700,
         width = 150, height = 350,
     },
+
+    -- Roster data, sorted by realm and guild
     roster = {
         _whereis = {},
     },
@@ -43,6 +49,10 @@ SOFIA.defaults = {
 function SOFIA.LoadDB(self)
     local currentversion = 020
     local db = SOFIADB or {}
+
+    if type(db.debug) ~= 'boolean' then
+        db.debug = self.defaults.debug
+    end
 
     if not db.window then
         db.window = self.defaults.window
