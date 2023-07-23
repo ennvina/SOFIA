@@ -6,6 +6,24 @@ local GetServerTime = GetServerTime
 -- List of players; will be synchronized with db during ApplyRosterSettings
 local roster = {}
 
+function SOFIA.GetRoster(self, realm, guild)
+    if realm == '_whereis' then
+        self:Debug("Invalid real name '%s'.", realm)
+    end
+
+    if not roster[realm] then
+        self:Debug("Unknown realm '%s'.", realm)
+        return {}
+    end
+
+    if not roster[realm][guild] then
+        self:Debug("Unknown guild '%s'.", guild)
+        return {}
+    end
+
+    return roster[realm][guild]
+end
+
 -- Create a new player, return it and return its update status
 local function CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
     local time = GetServerTime()
@@ -126,7 +144,7 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
     return player, updated
 end
 
-local function StorePlayerLocation(player, realm, guild)
+function SOFIA.StorePlayerLocation(self, player, realm, guild)
     local location = { realm = realm or "", guild = guild or "" }
     roster._whereis[player.guid] = location
 
@@ -141,9 +159,9 @@ local function StorePlayerLocation(player, realm, guild)
     roster[location.realm][location.guild][player.guid] = player
 end
 
-local function RelocatePlayer(player, fromRealm, fromGuild, toRealm, toGuild)
+function SOFIA.RelocatePlayer(self, player, fromRealm, fromGuild, toRealm, toGuild)
     roster[fromRealm or ""][fromGuild or ""][player.guid] = nil
-    StorePlayerLocation(player, toRealm, toGuild)
+    self:StorePlayerLocation(player, toRealm, toGuild)
     if (fromRealm or "") ~= toRealm then
         SOFIA:Debug("Relocated %s from realm '%s' to '%s'.", player.name, fromRealm or "", toRealm)
     end
@@ -203,84 +221,17 @@ function SOFIA.SetPlayerInfo(self, guid, realm, name, class, guild, level, progr
         local _, updated = UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
         -- Move player if realm or guild has changed
         if ((realm or "") ~= location.realm) or ((guild or "") ~= location.guild) then
-            RelocatePlayer(player, location.realm, location.guild, realm, guild)
+            self:RelocatePlayer(player, location.realm, location.guild, realm, guild)
         end
         return false, updated
     else
         -- Player unknown yet: add
         local player, updated = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
-        StorePlayerLocation(player, realm, guild)
+        self:StorePlayerLocation(player, realm, guild)
         return true, updated
-    end
-end
-
--- GetGuildRosterInfo() is available with new data
-local function UpdateAllGuild()
-    if not IsInGuild() then return end -- Very unlikely, may happen if quitting guild during update?
-
-    local realm = GetRealmName() or ""
-    local guild = select(1, GetGuildInfo("player")) or ""
-    local nbGuildmates = GetNumGuildMembers() or 0
-
-    if realm == "" or guild == "" or nbGuildmates == 0 then
-        -- Wrong init, try again later
-        SOFIA:Debug("Cannot update guild status right now, will try again in a few seconds.")
-        return
-    end
-
-    local guildmates = {} -- Gather GUIDs of guildmates currently in the guild
-    for i=1, nbGuildmates do
-        local name, _, _, level, _, _, _, _, _, _, class, _, _, _, _, _, guid = GetGuildRosterInfo(i)
-        name = select(1,strsplit("-", name))
-        guildmates[guid] = true
-        local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level)
-        if whatChanged.guild then
-            SOFIA:Debug("%s joined guild '%s'.", name, guild)
-        end
-    end
-
-    -- Check who left guild
-    local leavers = {}
-    for guid, player in pairs(roster[realm][guild]) do
-        if not guildmates[guid] then
-            SOFIA:Debug("%s left guild '%s'.", player.name, guild)
-            table.insert(leavers, player)
-        end
-    end
-    for _, player in ipairs(leavers) do
-        -- Put the player in the 'guildless' guild by default
-        -- Maybe we'll cross the player again someday and the guild will be updated
-        player.guild = ""
-        RelocatePlayer(player, realm, guild, realm, "")
     end
 end
 
 function SOFIA.ApplyRosterSettings(self, _roster)
     roster = _roster
-end
-
-local function WhoAmI()
-    local guid, realm, name, class = UnitGUID("player"), GetRealmName(), UnitName("player"), select(2,UnitClass("player")) -- Intrinsics
-    local guild = select(1, GetGuildInfo("player")) -- Guild info
-    local level, progress = UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil -- Level
-    local dead = UnitIsDeadOrGhost("player") -- Death status
-    local isNew, whatChanged = SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
-end
-
-local rosterTimerFrame = CreateFrame("Frame", AddonName.."_RosterTimer")
-
-function SOFIA.StartRosterTimer(self)
-    rosterTimerFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
-    rosterTimerFrame:SetScript("OnEvent", UpdateAllGuild)
-
-    -- Request guild info on a regular basis
-    -- Request every 11 secs (must be more than 10 secs)
-    C_Timer.NewTicker(11, C_GuildInfo.GuildRoster)
-    -- C_GuildInfo.GuildRoster() -- Do not request now, because guild info is unlikely available at start
-
-    -- Request own info
-    -- Unlike guilds, the 10 secs threshold is not mandatory, but it's best no to query player info too often either
-    C_Timer.NewTicker(11, WhoAmI)
-
-    SOFIA:Debug("Started roster timers.")
 end

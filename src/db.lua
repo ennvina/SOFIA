@@ -101,11 +101,20 @@ end
 local loader = CreateFrame("Frame", AddonName.."_DBLoader")
 loader:RegisterEvent("VARIABLES_LOADED")
 loader:SetScript("OnEvent", function (event)
+    -- Load the DB or initialize to defaults, if loading for the first time
     SOFIA:LoadDB()
-    SOFIA:CreateWindow() -- Good practice to create window when variables are loaded, to avoid clunky behavior
+
+    -- Good practice to create window when variables are loaded, to avoid clunky behavior
+    SOFIA:CreateWindow()
+
     SOFIA:ApplySettings()
-    SOFIA:StartRosterTimer() -- Good practice to query roster information only when roster is linked to db
+
+    -- Good practice to query player information only when roster is linked to db
+    SOFIA:StartGuildTimer()
+    SOFIA:StartMyselfTimer()
+
 --    SOFIAOptionsPanel_Init(SOFIA.OptionsPanel)
+
     loader:UnregisterEvent("VARIABLES_LOADED")
     SOFIA:Debug("Variables loaded and applied.")
 end)

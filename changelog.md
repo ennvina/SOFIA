@@ -1,5 +1,11 @@
 ## SOFIA Changelog
 
+#### v0.2.1-alpha (2023-07-23)
+
+- Fixed many issues when fetching guild info
+- Track when a player leaves your guild
+- Track when you die
+
 #### v0.2.0-alpha (2023-07-22)
 
 - System for storing character information
