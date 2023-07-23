@@ -53,7 +53,7 @@ function SOFIA:StartGuildTimer()
     -- Once information is available, the "GUILD_ROSTER_UPDATE" event is fired
     -- Please note, guild info is not guaranteed to be really available even after the event
     -- The request is ignored if done more often than every 10 secs, hence the 11 secs value
-    C_Timer.NewTicker(11, C_GuildInfo.GuildRoster)
+    C_Timer.NewTicker(11, function() C_GuildInfo.GuildRoster() end)
 
     -- We'd like to request immediately at start
     -- But there is a very little chance that guild info would be available this early

@@ -1,6 +1,7 @@
 local AddonName, SOFIA = ...
 
 local function RefreshMyself()
+    -- @todo implement a security against guildless tests, which happen quite often (during startup, loading screens...)
     local guid, realm, name, class = UnitGUID("player"), GetRealmName(), UnitName("player"), select(2,UnitClass("player")) -- Intrinsics
     local guild = select(1, GetGuildInfo("player")) -- Guild info
     local level, progress = UnitLevel("player"), (UnitXPMax("player") > 0) and (UnitXP("player")/UnitXPMax("player")) or nil -- Level
