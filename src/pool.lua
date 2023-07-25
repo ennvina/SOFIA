@@ -105,13 +105,20 @@ function SOFIA:RemoveTagPoolPlayer(guid)
     self.pool.candidates[guid] = nil
     self.pool.nbCandidates = self.pool.nbCandidates - 1
 
-    for _, player in ipairs(self.pool.chosen) do
+    if self:IsChosenOne(guid) then
+        -- A chosen one was removed, replace by someone else or no one
+        self:WriteCandidatesToTags()
+    end
+end
+
+-- Check if a player is a chosen one, and if yes, return its index
+function SOFIA:IsChosenOne(guid)
+    for index, player in ipairs(self.pool.chosen) do
         if player.guid == guid then
-            -- A chosen one was removed, replace by someone else or no one
-            self:WriteCandidatesToTags()
-            break
+            return index
         end
     end
+    return nil
 end
 
 function SOFIA:WriteCandidatesToTags()
