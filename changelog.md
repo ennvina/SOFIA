@@ -1,5 +1,10 @@
 ## SOFIA Changelog
 
+#### v0.3.1-alpha (2023-07-25)
+
+- /sofia reset now only resets window settings, not the roster
+- The roster can be purged with /sofia delete
+
 #### v0.3.0-alpha (2023-07-23)
 
 - Ability to create name tags

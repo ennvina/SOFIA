@@ -26,10 +26,15 @@ end
 
 SlashCmdList.SOFIA = function(msg, editBox)
     if msg == "reset" then
-        SOFIADB = nil -- reset to nothing
-        SOFIA:LoadDB() -- because DB has nothing, loading will set it to default
+        SOFIA.db.window = SOFIA.defaults.window
         SOFIA:ApplySettings()
-        printChat("Options and data have been reset.")
+        printChat("Options have been reset.")
+    elseif msg == "delete" then
+        SOFIA.db.roster = SOFIA.defaults.roster
+        if SOFIA.window and SOFIA.window:IsShown() then
+            SOFIA:RefreshTagPool()
+        end
+        printChat("All data have been wiped.")
     elseif msg == "show" then
         SOFIA:ShowWindow()
         printChat("Window shown. If you still don't see it, please try /sofia reset")
@@ -46,7 +51,8 @@ SlashCmdList.SOFIA = function(msg, editBox)
         printChat("Commands:"..
         "\n".."show: show the window"..
         "\n".."hide: hide the window"..
-        "\n".."reset: reset to default settings and wipe all data")
+        "\n".."reset: reset to default settings"..
+        "\n".."delete: wipe all roster data on all realms")
     end
 end
 
