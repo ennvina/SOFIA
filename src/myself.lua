@@ -36,4 +36,7 @@ function SOFIA:StartMyselfTimer()
     -- Request own info on a regular basis
     -- There's no need to check too often because events are already tracked to update when something relevant happens
     C_Timer.NewTicker(10, RefreshMyself)
+
+    -- Try in 2 secs, just in case
+    C_Timer.NewTimer(2, RefreshMyself)
 end

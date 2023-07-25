@@ -59,4 +59,5 @@ function SOFIA:StartGuildTimer()
     -- But there is a very little chance that guild info would be available this early
     -- Even after the 11 secs delay from above, the first fetch is not always good
 --    C_GuildInfo.GuildRoster()
+    C_Timer.NewTimer(4, function() C_GuildInfo.GuildRoster() end) -- Try in 4 secs anyway
 end
