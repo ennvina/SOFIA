@@ -1,5 +1,14 @@
 local AddonName, SOFIA = ...
 
+local function CreateText(parent, className, marginLeft, color)
+    local text = parent:CreateFontString("ARTWORK", nil, className)
+
+    text:SetPoint("LEFT", marginLeft, 0)
+    text:SetTextColor(color:GetRGB())
+
+    return text
+end
+
 function SOFIA:CreateTag(window)
     if not window.tags then
         window.tags = {}
@@ -14,11 +23,10 @@ function SOFIA:CreateTag(window)
     tag:SetPoint("RIGHT", -border, 0)
     tag:SetHeight(constants.height - 2*border)
 
-    tag.text = tag:CreateFontString("ARTWORK", nil)
-    tag.text:SetFont(constants.fontFace, constants.fontSize)
-    tag.text:SetPoint("LEFT", constants.marginLeft, 0)
     local fgColor = self:GetColor(constants.fgColor)
-    tag.text:SetTextColor(fgColor:GetRGB())
+    tag.texts = {}
+    tag.texts.level = CreateText(tag, constants.className, constants.marginLeftLevel, fgColor)
+    tag.texts.name  = CreateText(tag, constants.className, constants.marginLeftName , fgColor)
 
     tag.texture = tag:CreateTexture(nil, "LOW")
     local bgColor = self:GetColor(constants.bgColor)
@@ -41,6 +49,9 @@ function SOFIA:FillTag(index, player)
     local tag = self.window.tags[index]
 
     tag.texture:SetColorTexture(GetClassColor(player.class))
+
+    tag.texts.level:SetText(tostring(player.level))
+    tag.texts.name:SetText(player.name)
 end
 
 function SOFIA:EmptyTag(index)
@@ -52,4 +63,7 @@ function SOFIA:EmptyTag(index)
 
     -- Set it almost transparent, until we find a better appearance
     tag.texture:SetColorTexture(0, 0, 0, 0.1)
+
+    tag.texts.level:SetText("")
+    tag.texts.name:SetText("")
 end

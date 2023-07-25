@@ -47,9 +47,9 @@ SOFIA.constants = {
     tag = {
         height = 24,
         border = 1,
-        marginLeft = 5,
-        fontFace = "GameFontNormalLarge",
-        fontSize = 16,
+        marginLeftLevel = 5,
+        marginLeftName = 25,
+        className = "GameFontNormalLarge",
         bgColor = 'flashy', -- Flashy, for testing purposes
         fgColor = 'white',
     },
