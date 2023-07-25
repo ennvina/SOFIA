@@ -50,6 +50,7 @@ SOFIA.constants = {
         marginLeft = 5,
         marginRight = 10,
         className = "GameFontNormalLarge",
+        texCoord = {0, 0.97, 0, 1},
         texture = 'Interface\\RaidFrame\\Raid-Bar-Hp-Fill',
         fgColor = 'white',
     },
