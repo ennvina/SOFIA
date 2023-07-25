@@ -19,7 +19,7 @@ function SOFIA:ReserveTagPool(window, count)
         nbAdded = nbAdded + 1
     end
     if nbAdded > 0 then
-        self:Debug("Created %d tags in pool", nbAdded)
+        self:Debug("Created %d tag%s in pool", nbAdded, nbAdded > 1 and "s" or "")
     end
 end
 
@@ -162,21 +162,21 @@ function SOFIA:WriteCandidatesToTags()
         end
     end
 
-    local debug = "Best players: "
+    -- local debug = "Best players: "
     for i = 1, nbActiveTags do
         local player = self.pool.chosen[i]
         if player then
             self:FillTag(i, player)
-            if i == 1 then
-                debug = debug..player.name
-            else
-                debug = debug..", "..player.name
-            end
+            -- if i == 1 then
+            --     debug = debug..player.name
+            -- else
+            --     debug = debug..", "..player.name
+            -- end
         else
             self:EmptyTag(i)
         end
     end
-    self:Debug(debug)
+--    self:Debug(debug)
 end
 
 -- Static initializer
