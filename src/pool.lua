@@ -90,9 +90,21 @@ function SOFIA:SetTagPoolPlayer(player, isNew, updated)
     -- @todo
     self:Debug("Must set player %s", tostring(player.name))
 
+    local worthChecking = false
     if not self.pool.candidates[player.guid] then
         self.pool.candidates[player.guid] = player
         self.pool.nbCandidates = self.pool.nbCandidates + 1
+        worthChecking = true
+    elseif updated.something then
+        -- For now, accept all kinds of updates
+        -- @todo keep only updates that matter (level?)
+        worthChecking = true
+    end
+
+    if worthChecking then
+        -- For now, simply refresh the whole list
+        -- @todo check if the player would have a chance in the chosen list
+        self:WriteCandidatesToTags()
     end
 end
 
@@ -121,13 +133,37 @@ function SOFIA:IsChosenOne(guid)
     return nil
 end
 
+-- Sort all candidates and pick the 'best' ones, ordered by relevance
+-- The best ones are the chosen ones
 function SOFIA:WriteCandidatesToTags()
     local nbActiveTags = self.pool.nbActiveTags
     local nbCandidates = self.pool.nbCandidates
 
-    -- @todo
-    self:Debug("Must sort and write candidates to tags")
-    -- self.pool.chosen = {}
+    self.pool.chosen = {}
+    for _, player in pairs(self.pool.candidates) do
+        table.insert(self.pool.chosen, player)
+    end
+
+    table.sort(self.pool.chosen, function(a, b)
+        if a.level == b.level then
+            -- Levels are identical
+            -- The best one is the one who leveled up first
+            return a.lastLevelUp < b.lastLevelUp
+        end
+
+        -- Levels are different
+        -- The best one is the one with highest level
+        return a.level > b.level
+    end)
+
+    if nbCandidates > nbActiveTags then
+        -- Clamp the list if there are too many candidates
+        for i = nbCandidates, nbActiveTags+1, -1 do
+            table.remove(self.pool.chosen, i)
+        end
+    end
+
+    -- DevTools_Dump(self.pool.chosen)
 end
 
 -- Static initializer
