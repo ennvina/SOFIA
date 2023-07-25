@@ -39,6 +39,10 @@ local function UpdateAllGuild()
         -- Maybe we'll cross the player again someday and the guild will be updated
         player.guild = ""
         SOFIA:RelocatePlayer(player, realm, guild, realm, "")
+        if player.guid ~= UnitGUID("player") then
+            -- Remove guild leavers from candidates, except myself because I'll always be a candidate
+            SOFIA:RemoveTagPoolPlayer(player.guid)
+        end
     end
 end
 
