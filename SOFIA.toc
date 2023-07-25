@@ -14,5 +14,6 @@ src\gui.lua
 src\guild.lua
 src\main.lua
 src\myself.lua
+src\pool.lua
 src\roster.lua
 src\tag.lua
