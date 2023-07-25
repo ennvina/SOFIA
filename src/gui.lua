@@ -35,12 +35,12 @@ local function createMainFrame()
     )
 
     mainFrame:SetScript("OnShow", function()
-        SOFIA:RefreshTagPool()
+        SOFIA:RefreshTagPoolCount()
     end)
 
     mainFrame:SetScript("OnSizeChanged", function()
         if mainFrame:IsShown() then
-            SOFIA:RefreshTagPool()
+            SOFIA:RefreshTagPoolCount()
         end
     end)
 

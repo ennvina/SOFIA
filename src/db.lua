@@ -122,6 +122,12 @@ loader:SetScript("OnEvent", function (event)
 
     SOFIA:ApplySettings()
 
+    -- At first, the one and only player guaratanteed to be tracked is oneself
+    local myself = SOFIA:GetPlayerByGUID(UnitGUID("player"))
+    if myself then
+        SOFIA:SetTagPoolPlayer(myself)
+    end
+
     -- Good practice to query player information only when roster is linked to db
     SOFIA:StartGuildTimer()
     SOFIA:StartMyselfTimer()

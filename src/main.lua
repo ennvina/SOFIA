@@ -32,7 +32,7 @@ SlashCmdList.SOFIA = function(msg, editBox)
     elseif msg == "delete" then
         SOFIA.db.roster = SOFIA.defaults.roster
         if SOFIA.window and SOFIA.window:IsShown() then
-            SOFIA:RefreshTagPool()
+            SOFIA:SetTagPoolPlayers({})
         end
         printChat("All data have been wiped.")
     elseif msg == "show" then

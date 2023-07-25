@@ -24,6 +24,17 @@ function SOFIA:GetRoster(realm, guild)
     return roster[realm][guild]
 end
 
+-- Get player using GUID
+function SOFIA:GetPlayerByGUID(guid)
+    local location = roster._whereis and roster._whereis[guid]
+    if not location then
+        return nil
+    end
+
+    local rrg = self:GetRoster(location.realm, location.guild)
+    return rrg and rrg[guid] or nil
+end
+
 -- Create a new player, return it and return its update status
 local function CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
     local time = GetServerTime()
@@ -215,26 +226,31 @@ function SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, d
            and roster[location.realm][location.guild][guid]
            and (roster[location.realm][location.guild][guid].realm ~= location.realm
              or roster[location.realm][location.guild][guid].guild ~= location.guild) then
-             SOFIA:Debug("%s location is not synchronized with its actual realm and guild.", guid)
+             self:Debug("%s location is not synchronized with its actual realm and guild.", guid)
         end
     end
 
     -- Location tells whether the player already exists
+    local player, isNew, updated
     if location then
         -- Has location: update the known player
-        local player = roster[location.realm][location.guild][guid]
-        local _, updated = UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
+        player = roster[location.realm][location.guild][guid]
+        updated = select(2, UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead))
         -- Move player if realm or guild has changed
         if realm ~= location.realm or guild ~= location.guild then
             self:RelocatePlayer(player, location.realm, location.guild, realm, guild)
         end
-        return false, updated
+        isNew = false
     else
         -- No location: add a new player
-        local player, updated = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
+        player, updated = CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
         self:StorePlayerLocation(player, realm, guild)
-        return true, updated
+        isNew = true
     end
+
+    self:SetTagPoolPlayer(player, isNew, updated)
+
+    return isNew, updated
 end
 
 function SOFIA:ApplyRosterSettings(_roster)
