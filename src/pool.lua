@@ -54,12 +54,14 @@ function SOFIA:RefreshTagPoolCount()
         self:ReserveTagPool(self.window, nbActiveTags)
         self:ShrinkToFit(self.window, nbActiveTags)
         local addedActiveTags = nbActiveTags > self.pool.nbActiveTags
+        local chosenWereTruncated = self.pool.nbCandidates > self.pool.nbActiveTags
         self.pool.nbActiveTags = nbActiveTags
-        if addedActiveTags then
+        if addedActiveTags and chosenWereTruncated then
             self:WriteCandidatesToTags()
         end
     end
 end
+
 -- Set the list of all players, indexed by their GUID
 -- If the list is empty, all players are cleared
 function SOFIA:SetTagPoolPlayers(players)
