@@ -74,7 +74,7 @@ SOFIA.defaults = {
     window = {
         visible = true,
         point = 'TOPLEFT', x = 350, y = 700,
-        width = 150, height = 300,
+        width = 195, height = 390,
     },
 
     -- Roster data, sorted by realm and guild

@@ -5,8 +5,10 @@ local function CreateText(parent, constants, side)
 
     if side == "LEFT" then
         text:SetPoint("LEFT", constants.marginLeft, 0)
+        text:SetJustifyH("LEFT")
     else
         text:SetPoint("RIGHT", -constants.marginRight, 0)
+        text:SetJustifyH("RIGHT")
     end
     text:SetTextColor(SOFIA:GetColor(constants.fgColor):GetRGB())
 
@@ -31,6 +33,7 @@ function SOFIA:CreateTag(window)
     tag.texts = {}
     tag.texts.name  = CreateText(tag, constants, "LEFT")
     tag.texts.level = CreateText(tag, constants, "RIGHT")
+    tag.texts.name:SetPoint("RIGHT", tag.texts.level, "LEFT")
 
     tag.texture = tag:CreateTexture(nil, "LOW")
     tag.texture:SetTexCoord(unpack(constants.texCoord))
