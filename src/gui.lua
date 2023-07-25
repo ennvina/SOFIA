@@ -143,7 +143,9 @@ local function createTitleButtons(baseFrame)
                 pushed = 'Interface/Buttons/UI-Panel-MinimizeButton-Down',
                 highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
             },
-            callback = function() SOFIA:HideWindow() end,
+            callback = function()
+                SlashCmdList.SOFIA("hide")
+            end,
             texCoord = {0.08, 0.9, 0.1, 0.9},
             -- tooltip = CLOSE, -- No need a tooltip, everyone knows what a close button is
         },
