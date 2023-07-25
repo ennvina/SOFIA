@@ -50,7 +50,7 @@ SOFIA.constants = {
         marginLeftLevel = 5,
         marginLeftName = 25,
         className = "GameFontNormalLarge",
-        bgColor = 'flashy', -- Flashy, for testing purposes
+        texture = 'Interface\\RaidFrame\\Raid-Bar-Hp-Fill',
         fgColor = 'white',
     },
 }

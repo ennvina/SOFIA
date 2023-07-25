@@ -29,8 +29,7 @@ function SOFIA:CreateTag(window)
     tag.texts.name  = CreateText(tag, constants.className, constants.marginLeftName , fgColor)
 
     tag.texture = tag:CreateTexture(nil, "LOW")
-    local bgColor = self:GetColor(constants.bgColor)
-    tag.texture:SetColorTexture(bgColor.r, bgColor.g, bgColor.b, 0.5)
+    tag.texture:SetTexture(constants.texture)
     tag.texture:SetAllPoints()
 
     if not window.tags then
@@ -48,7 +47,7 @@ function SOFIA:FillTag(index, player)
     end
     local tag = self.window.tags[index]
 
-    tag.texture:SetColorTexture(GetClassColor(player.class))
+    tag.texture:SetVertexColor(GetClassColor(player.class))
 
     tag.texts.level:SetText(tostring(player.level))
     tag.texts.name:SetText(player.name)
@@ -61,8 +60,8 @@ function SOFIA:EmptyTag(index)
     end
     local tag = self.window.tags[index]
 
-    -- Set it almost transparent, until we find a better appearance
-    tag.texture:SetColorTexture(0, 0, 0, 0.1)
+    -- Set it fully transparent
+    tag.texture:SetVertexColor(0, 0, 0, 0)
 
     tag.texts.level:SetText("")
     tag.texts.name:SetText("")
