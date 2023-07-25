@@ -52,7 +52,8 @@ function SOFIA:FillTag(index, player)
     end
     local tag = self.window.tags[index]
 
-    tag.texture:SetVertexColor(GetClassColor(player.class))
+    local r, g, b = GetClassColor(player.class)
+    tag.texture:SetVertexColor(r, g, b, 1)
 
     tag.texts.name:SetText(tostring(index)..". "..player.name)
     tag.texts.level:SetText(tostring(player.level))
