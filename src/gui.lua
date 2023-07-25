@@ -34,6 +34,16 @@ local function createMainFrame()
         end
     )
 
+    mainFrame:SetScript("OnShow", function()
+        SOFIA:RefreshTagPool()
+    end)
+
+    mainFrame:SetScript("OnSizeChanged", function()
+        if mainFrame:IsShown() then
+            SOFIA:RefreshTagPool()
+        end
+    end)
+
     return mainFrame
 end
 
@@ -187,12 +197,6 @@ local function createCornerResizer(baseFrame)
         config.height = frame:GetHeight()
     end)
 
-    baseFrame:SetScript("OnSizeChanged", function()
-        if baseFrame:IsShown() then
-            SOFIA:RefreshTagPool()
-        end
-    end)
-
     baseFrame.resizer = resizer
     return resizer
 end
@@ -217,7 +221,6 @@ function SOFIA:ShowWindow()
     local window = self:GetWindow()
     if window then
         window:Show()
-        self:RefreshTagPool()
     end
 end
 
@@ -246,9 +249,6 @@ function SOFIA:ToggleWindow()
     local window = self:GetWindow()
     if window then
         window:SetShown(visible)
-        if visible then
-            self:RefreshTagPool()
-        end
     end
 end
 
@@ -269,7 +269,4 @@ function SOFIA:ApplyWindowSettings()
     mainFrame:SetWidth(config.width)
     mainFrame:SetHeight(config.height)
     mainFrame:SetShown(config.visible)
-    if config.visible then
-        self:RefreshTagPool()
-    end
 end
