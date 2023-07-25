@@ -32,3 +32,24 @@ function SOFIA:CreateTag(window)
     end
     return tag
 end
+
+function SOFIA:FillTag(index, player)
+    if index < 0 or index > #self.window.tags then
+        self:Debug("Invalid tag index %s", tostring(index))
+        return
+    end
+    local tag = self.window.tags[index]
+
+    tag.texture:SetColorTexture(GetClassColor(player.class))
+end
+
+function SOFIA:EmptyTag(index)
+    if index < 0 or index > #self.window.tags then
+        self:Debug("Invalid tag index %s", tostring(index))
+        return
+    end
+    local tag = self.window.tags[index]
+
+    -- Set it almost transparent, until we find a better appearance
+    tag.texture:SetColorTexture(0, 0, 0, 0.1)
+end
