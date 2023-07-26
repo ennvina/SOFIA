@@ -1,8 +1,5 @@
 local AddonName, SOFIA = ...
 
--- Cache frequently called functions
-local GetServerTime = GetServerTime
-
 -- List of players; will be synchronized with db during ApplyRosterSettings
 local roster = {}
 
@@ -37,7 +34,7 @@ end
 
 -- Create a new player, return it and return its update status
 local function CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
-    local time = GetServerTime()
+    local time = SOFIA:GetCurrentTime()
 
     local player = {
         -- Intrinsics
@@ -108,7 +105,7 @@ end
 
 -- Update a player, return it and return what was updated in the player
 local function UpdatePlayer(player, guid, realm, name, class, guild, level, progress, dead)
-    local time = GetServerTime()
+    local time = SOFIA:GetCurrentTime()
 
     local updated = {
         everything = false, -- Cannot update everything because of immutable variables

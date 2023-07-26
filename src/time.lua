@@ -1,7 +1,11 @@
 local AddonName, SOFIA = ...
 
+function SOFIA:GetCurrentTime()
+    return C_DateAndTime.GetServerTimeLocal()
+end
+
 function SOFIA:HumanReadableDateTime(serverTime)
-    local secsAgo = GetServerTime()-serverTime
+    local secsAgo = self:GetCurrentTime()-serverTime
     if secsAgo < 0 then
         return "soon™"
     end
@@ -22,7 +26,9 @@ function SOFIA:HumanReadableDateTime(serverTime)
     -- Add date if too old (more than 60 minutes)
     local time = date("%H:%M", serverTime)
 
-    local daysAgo = math.floor(secsAgo/86400) -- 86400 = number of secs in a day
+    local myDay = math.floor(serverTime/86400) -- 86400 = number of secs in a day
+    local today = math.floor(self:GetCurrentTime()/86400)
+    local daysAgo = today-myDay
     if daysAgo <= 0 then
         return string.format("today %s", time)
     elseif daysAgo == 1 then

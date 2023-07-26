@@ -11,7 +11,6 @@
         "GetClassColor",
         "GameTooltip",
         "GameTooltip_SetTitle",
-        "GetServerTime",
         "UnitGUID",
         "UnitName",
         "UnitClass",
@@ -28,6 +27,7 @@
         "strsplit",
         "IsInGuild",
         "UnitIsUnit",
-        "date"
+        "date",
+        "C_DateAndTime"
     ]
 }

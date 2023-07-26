@@ -4,6 +4,9 @@
 
 - After more tests, the addon is ready to enter its Beta phase
 - First version available on CurseForge
+- Fixed texturing issues in Wrath
+- Fixed roster update if your player was the highest in the guild
+- Fixed date display on tooltip
 
 #### v0.3.3-alpha (2023-07-26)
 
