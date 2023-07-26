@@ -56,8 +56,8 @@ function SOFIA:RefreshTagPoolCount()
         local addedActiveTags = nbActiveTags > self.pool.nbActiveTags
         local chosenWereTruncated = self.pool.nbCandidates > self.pool.nbActiveTags
         self.pool.nbActiveTags = nbActiveTags
-        if addedActiveTags and chosenWereTruncated then
-            self:WriteCandidatesToTags()
+        if addedActiveTags then
+            self:WriteCandidatesToTags(not chosenWereTruncated)
         end
     end
 end
