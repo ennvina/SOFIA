@@ -1,7 +1,19 @@
 local AddonName, SOFIA = ...
 
+local timeOffset = 3600 * math.floor(0.5+(C_DateAndTime.GetServerTimeLocal()-GetServerTime())/3600)
+if timeOffset < -12*3600 or timeOffset > 12*3600 or timeOffset == 0 then
+    -- Security in case timeOffset computation failed
+    timeOffset = nil
+end
+
+-- Get GetServerTimeLocal() with the precision of GetServerTime()
+-- Reminder: GetServerTimeLocal() is only refreshed every 60 secs
 function SOFIA:GetCurrentTime()
-    return C_DateAndTime.GetServerTimeLocal()
+    if timeOffset then
+        return GetServerTime() + timeOffset
+    else
+        return C_DateAndTime.GetServerTimeLocal()
+    end
 end
 
 function SOFIA:HumanReadableDateTime(serverTime)

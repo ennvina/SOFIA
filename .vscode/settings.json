@@ -28,6 +28,7 @@
         "IsInGuild",
         "UnitIsUnit",
         "date",
-        "C_DateAndTime"
+        "C_DateAndTime",
+        "GetServerTime"
     ]
 }
