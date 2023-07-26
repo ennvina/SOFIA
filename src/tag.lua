@@ -48,7 +48,7 @@ function SOFIA:CreateTag(window)
     return tag
 end
 
-function SOFIA:FillTag(index, player)
+function SOFIA:FillTag(index, player, rank)
     if index < 0 or index > #self.window.tags then
         self:Debug("Invalid tag index %s", tostring(index))
         return
@@ -58,7 +58,7 @@ function SOFIA:FillTag(index, player)
     local r, g, b = GetClassColor(player.class)
     tag.texture:SetVertexColor(r, g, b, 1)
 
-    tag.texts.name:SetText(tostring(index)..". "..player.name)
+    tag.texts.name:SetText(tostring(rank or index)..". "..player.name)
     tag.texts.level:SetText(tostring(player.level))
 end
 

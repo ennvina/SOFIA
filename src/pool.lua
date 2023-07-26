@@ -186,15 +186,24 @@ function SOFIA:WriteCandidatesToTags(prechosen)
     end
 
     -- local debug = "Best players: "
+    local previousPlayer = nil
+    local previousRank = nil
     for i = 1, nbActiveTags do
         local player = self.pool.chosen[i]
         if player then
-            self:FillTag(i, player)
+            local rank = i
+            if previousPlayer and not PlayerSorter(previousPlayer, player) then
+                -- Give same rank to consecutive players with same score
+                rank = previousRank
+            end
+            self:FillTag(i, player, rank)
             -- if i == 1 then
             --     debug = debug..player.name
             -- else
             --     debug = debug..", "..player.name
             -- end
+            previousPlayer = player
+            previousRank = rank
         else
             self:EmptyTag(i)
         end

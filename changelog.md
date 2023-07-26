@@ -1,5 +1,10 @@
 ## SOFIA Changelog
 
+#### v0.3.2-alpha (2023-07-25)
+
+- Name tags display rank, name and level
+- Lots of optimizations when refreshing the list of name tags
+
 #### v0.3.1-alpha (2023-07-25)
 
 - /sofia reset now only resets window settings, not the roster

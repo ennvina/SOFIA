@@ -1,8 +1,8 @@
 ## Interface: 11403
-## Title: SOFIA |cffb200000.3.1-alpha|r
+## Title: SOFIA |cffb200000.3.2-alpha|r
 ## Notes: Speedrun Observer Following Incredible Avatars
 ## Author: Ennvina
-## Version: 0.3.1-alpha
+## Version: 0.3.2-alpha
 
 ## X-Category: Leveling,Guild
 
