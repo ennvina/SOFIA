@@ -121,10 +121,14 @@ function SOFIA:SetTagPoolPlayer(player, isNew, updated)
     else
         -- Player is not a chosen one: give the player a chance to be in it
         local hereComesANewChallenger = false
-        for _, challenger in ipairs(self.pool.chosen) do
-            if PlayerSorter(player, challenger) then
-                hereComesANewChallenger = true
-                break
+        if #self.pool.chosen < self.pool.nbActiveTags then
+            hereComesANewChallenger = true
+        else
+            for _, challenger in ipairs(self.pool.chosen) do
+                if PlayerSorter(player, challenger) then
+                    hereComesANewChallenger = true
+                    break
+                end
             end
         end
         if hereComesANewChallenger then
