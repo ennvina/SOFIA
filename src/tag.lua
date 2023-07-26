@@ -15,6 +15,22 @@ local function CreateText(parent, constants, side)
     return text
 end
 
+local function HumanReadableDay(serverTime)
+    local myDay = math.floor(serverTime/86400) -- 86400 = number of secs in a day
+    local today = math.floor(GetServerTime()/86400)
+    if myDay == today then
+        return "today"
+    elseif myDay == today-1 then
+        return "yesterday"
+    elseif myDay > today-31 then
+        return string.format("%d days ago", today-myDay)
+    elseif myDay > today-365 then
+        return date("%m/%d", serverTime)
+    else
+        return date("%Y/%m/%d", serverTime)
+    end
+end
+
 function SOFIA:CreateTag(window)
     if not window.tags then
         window.tags = {}
@@ -40,6 +56,21 @@ function SOFIA:CreateTag(window)
     tag.texture:SetTexture(constants.texture)
     tag.texture:SetAllPoints()
 
+    tag:SetScript("OnEnter", function()
+        if tag.player then
+            local level = tag.player.level
+            local day = HumanReadableDay(tag.player.lastLevelUp)
+            local time = date("%H:%M", tag.player.lastLevelUp)
+            local tooltip = string.format("Level |cffffff00%d|r since |cff808080at least|r |cffffff00%s %s|r", level, day, time)
+            GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", constants.tooltipOffsetX, -constants.tooltipOffsetY)
+            GameTooltip_SetTitle(GameTooltip, tooltip)
+            GameTooltip:Show()
+        end
+    end)
+    tag:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+
     if not window.tags then
         window.tags = { tag }
     else
@@ -60,6 +91,8 @@ function SOFIA:FillTag(index, player, rank)
 
     tag.texts.name:SetText(tostring(rank or index)..". "..player.name)
     tag.texts.level:SetText(tostring(player.level))
+
+    tag.player = player
 end
 
 function SOFIA:EmptyTag(index)
@@ -74,4 +107,6 @@ function SOFIA:EmptyTag(index)
 
     tag.texts.name:SetText("")
     tag.texts.level:SetText("")
+
+    tag.player = nil
 end

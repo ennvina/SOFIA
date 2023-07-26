@@ -1,5 +1,11 @@
 ## SOFIA Changelog
 
+#### v0.3.3-alpha (2023-07-26)
+
+- Tooltip indicates when the player level up
+- More exactly, this is when we learned that
+- The tooltip says "at least" to be more accurate
+
 #### v0.3.2-alpha (2023-07-25)
 
 - Name tags display rank, name and level

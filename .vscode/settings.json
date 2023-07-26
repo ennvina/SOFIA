@@ -27,6 +27,7 @@
         "GetNumGuildMembers",
         "strsplit",
         "IsInGuild",
-        "UnitIsUnit"
+        "UnitIsUnit",
+        "date"
     ]
 }
