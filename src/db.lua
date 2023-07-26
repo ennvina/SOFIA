@@ -29,9 +29,9 @@ end
 -- Global constants, not saved in db
 SOFIA.constants = {
     constraints = {
-        minWidth = 100,
+        minWidth = 150,
         minHeight = 100,
-        maxWidth = 800,
+        maxWidth = 1000,
         maxHeight = 1000,
     },
 

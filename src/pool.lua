@@ -62,6 +62,18 @@ function SOFIA:RefreshTagPoolCount()
     end
 end
 
+local function PlayerSorter(a, b)
+    if a.level == b.level then
+        -- Levels are identical
+        -- The best one is the one who leveled up first
+        return a.lastLevelUp < b.lastLevelUp
+    end
+
+    -- Levels are different
+    -- The best one is the one with highest level
+    return a.level > b.level
+end
+
 -- Set the list of all players, indexed by their GUID
 -- If the list is empty, all players are cleared
 function SOFIA:SetTagPoolPlayers(players)
@@ -108,9 +120,19 @@ function SOFIA:SetTagPoolPlayer(player, isNew, updated)
         self:WriteCandidatesToTags(true)
     else
         -- Player is not a chosen one: give the player a chance to be in it
-        -- Pre-fill the chosen list with the new candidate
-        table.insert(self.pool.chosen, player)
-        self:WriteCandidatesToTags(true)
+        local hereComesANewChallenger = false
+        for _, challenger in ipairs(self.pool.chosen) do
+            if PlayerSorter(player, challenger) then
+                hereComesANewChallenger = true
+                break
+            end
+        end
+        if hereComesANewChallenger then
+            -- Pre-fill the chosen list with the new candidate
+            table.insert(self.pool.chosen, player)
+            -- Then go for it
+            self:WriteCandidatesToTags(true)
+        end
     end
 end
 
@@ -154,17 +176,7 @@ function SOFIA:WriteCandidatesToTags(prechosen)
         end
     end
 
-    table.sort(self.pool.chosen, function(a, b)
-        if a.level == b.level then
-            -- Levels are identical
-            -- The best one is the one who leveled up first
-            return a.lastLevelUp < b.lastLevelUp
-        end
-
-        -- Levels are different
-        -- The best one is the one with highest level
-        return a.level > b.level
-    end)
+    table.sort(self.pool.chosen, PlayerSorter)
 
     if nbCandidates > nbActiveTags then
         -- Clamp the list if there are too many candidates
