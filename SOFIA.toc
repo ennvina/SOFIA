@@ -17,3 +17,4 @@ src\myself.lua
 src\pool.lua
 src\roster.lua
 src\tag.lua
+src\time.lua
