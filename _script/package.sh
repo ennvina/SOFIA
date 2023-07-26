@@ -45,7 +45,7 @@ echo
 echo -n "Updating TOC files... "
 # To know the version of a specific game client, enter: /dump select(4, GetBuildInfo())
 VANILLA_BUILD_VERSION=11403
-WRATH_BUILD_VERSION=30401
+WRATH_BUILD_VERSION=30402
 cp $AddonName/$AddonName.toc $AddonName/${AddonName}_Classic.toc
 sed -i s/'^## Interface:.*'/"## Interface: $VANILLA_BUILD_VERSION"/ $AddonName/${AddonName}_Classic.toc || bye "Cannot update version of TOC file"
 cp $AddonName/$AddonName.toc $AddonName/${AddonName}_Wrath.toc
