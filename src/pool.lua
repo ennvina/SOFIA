@@ -95,15 +95,22 @@ function SOFIA:SetTagPoolPlayer(player, isNew, updated)
         self.pool.nbCandidates = self.pool.nbCandidates + 1
         worthChecking = true
     elseif updated.something then
-        -- For now, accept all kinds of updates
-        -- @todo keep only updates that matter (level?)
-        worthChecking = true
+        -- For now, interesting updates are level and name
+        worthChecking = updated.level or updated.name
     end
 
-    if worthChecking then
-        -- For now, simply refresh the whole list
-        -- @todo check if the player would have a chance in the chosen list
-        self:WriteCandidatesToTags()
+    if not worthChecking then
+        return
+    end
+
+    if self:IsChosenOne(player.guid) then
+        -- Player is a chosen one: refresh the tag list accordingly
+        self:WriteCandidatesToTags(true)
+    else
+        -- Player is not a chosen one: give the player a chance to be in it
+        -- Pre-fill the chosen list with the new candidate
+        table.insert(self.pool.chosen, player)
+        self:WriteCandidatesToTags(true)
     end
 end
 
@@ -134,13 +141,17 @@ end
 
 -- Sort all candidates and pick the 'best' ones, ordered by relevance
 -- The best ones are the chosen ones
-function SOFIA:WriteCandidatesToTags()
+-- If prechosen is true, base the chosen ones off of previous chosen
+-- Otherwise, all candidates are evaulated
+function SOFIA:WriteCandidatesToTags(prechosen)
     local nbActiveTags = self.pool.nbActiveTags
-    local nbCandidates = self.pool.nbCandidates
+    local nbCandidates = prechosen and #self.pool.chosen or self.pool.nbCandidates
 
-    self.pool.chosen = {}
-    for _, player in pairs(self.pool.candidates) do
-        table.insert(self.pool.chosen, player)
+    if not prechosen then
+        self.pool.chosen = {}
+        for _, player in pairs(self.pool.candidates) do
+            table.insert(self.pool.chosen, player)
+        end
     end
 
     table.sort(self.pool.chosen, function(a, b)
