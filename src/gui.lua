@@ -12,27 +12,34 @@ function SOFIA:GetWindowConfig()
     end
 end
 
-local function createMainFrame()
-    local mainFrame = CreateFrame("Frame", AddonName..'_MainFrame', UIParent)
+function SOFIA:MakeWindowMovable(sourceFrame, window)
+    sourceFrame:EnableMouse(true)
+    sourceFrame:SetMovable(true)
 
-    mainFrame:EnableMouse(true)
-    mainFrame:SetMovable(true)
+    sourceFrame:RegisterForDrag("LeftButton")
+    sourceFrame:SetClampedToScreen(true)
+    sourceFrame:SetScript("OnDragStart", function()
+        window:StartMoving()
+    end)
 
-    mainFrame:RegisterForDrag("LeftButton")
-    mainFrame:SetClampedToScreen(true)
-    mainFrame:SetScript("OnDragStart", function() mainFrame:StartMoving() end)
-
-    mainFrame:SetScript(
+    sourceFrame:SetScript(
         "OnDragStop",
         function()
-            mainFrame:StopMovingOrSizing()
+            window:StopMovingOrSizing()
 
             local config = SOFIA:GetWindowConfig()
             config.point = 'TOPLEFT'
-            config.y = mainFrame:GetTop()
-            config.x = mainFrame:GetLeft()
+            config.y = window:GetTop()
+            config.x = window:GetLeft()
         end
     )
+
+end
+
+local function createMainFrame()
+    local mainFrame = CreateFrame("Frame", AddonName..'_MainFrame', UIParent)
+
+    SOFIA:MakeWindowMovable(mainFrame, mainFrame)
 
     mainFrame:SetScript("OnShow", function()
         SOFIA:RefreshTagPoolCount()

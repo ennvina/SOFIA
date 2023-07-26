@@ -31,7 +31,7 @@ SOFIA.constants = {
     constraints = {
         minWidth = 150,
         minHeight = 100,
-        maxWidth = 1000,
+        maxWidth = 450,
         maxHeight = 1000,
     },
 
@@ -49,7 +49,7 @@ SOFIA.constants = {
         border = 1,
         marginLeft = 5,
         marginRight = 10,
-        tooltipOffsetX = -84,
+        tooltipOffsetX = -82,
         tooltipOffsetY = 28,
         className = "GameFontNormalLarge",
         texCoord = {0, 0.97, 0, 1},

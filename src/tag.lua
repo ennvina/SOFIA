@@ -71,6 +71,9 @@ function SOFIA:CreateTag(window)
         GameTooltip:Hide()
     end)
 
+    -- Must enable moving capabilities, because the OnEnter/OnLeave scripts will absorb mouse events
+    self:MakeWindowMovable(tag, window)
+
     if not window.tags then
         window.tags = { tag }
     else
