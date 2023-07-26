@@ -1,5 +1,10 @@
 ## SOFIA Changelog
 
+#### v0.4.0-beta (2023-07-26)
+
+- After more tests, the addon is ready to enter its Beta phase
+- First version available on CurseForge
+
 #### v0.3.3-alpha (2023-07-26)
 
 - Tooltip indicates when the player level up
