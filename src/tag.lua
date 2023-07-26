@@ -35,7 +35,7 @@ function SOFIA:CreateTag(window)
     tag.texts.level = CreateText(tag, constants, "RIGHT")
     tag.texts.name:SetPoint("RIGHT", tag.texts.level, "LEFT")
 
-    tag.texture = tag:CreateTexture(nil, "LOW")
+    tag.texture = tag:CreateTexture(nil, "ARTWORK")
     tag.texture:SetTexCoord(unpack(constants.texCoord))
     tag.texture:SetTexture(constants.texture)
     tag.texture:SetAllPoints()
