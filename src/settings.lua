@@ -21,7 +21,8 @@ function SOFIA:SetSort(sort)
         self:Error("Cannot set sort option %s", tostring(sort))
     end
 
-    -- @todo apply option to window and roster
+    -- Reconsider all candidates to sort tags
+    self:WriteCandidatesToTags()
 end
 
 function SOFIA:SetSize(size)
@@ -78,7 +79,7 @@ function SOFIA:OpenSettings()
     local menu = {
         -- Option to sort by different value
         {
-            text = "Sort",
+            text = "Sort By",
             notCheckable = true,
             hasArrow = true,
             menuList = {

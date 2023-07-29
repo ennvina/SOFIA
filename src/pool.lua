@@ -63,7 +63,7 @@ function SOFIA:RefreshTagPoolCount()
     end
 end
 
-local function PlayerSorter(a, b)
+local function PlayerSorterByLevel(a, b)
     if a.level == b.level then
         -- Levels are identical
         -- The best one is the one who leveled up first
@@ -73,6 +73,28 @@ local function PlayerSorter(a, b)
     -- Levels are different
     -- The best one is the one with highest level
     return a.level > b.level
+end
+
+local function PlayerSorterByRecentLevelUp(a, b)
+    -- The best players are the ones who leveled up last
+    return a.lastLevelUp > b.lastLevelUp
+end
+
+local function GetPlayerSorter()
+    local config = SOFIA:GetSettingsConfig()
+    local sort = config and config.sort
+    if sort == "recent" then
+        return PlayerSorterByRecentLevelUp
+    elseif sort == "level" then
+        return PlayerSorterByLevel
+    else
+        if type(sort) == 'string' then
+            SOFIA:Error("Unknown sort option '%s'.", sort)
+        else
+            SOFIA:Error("Undefined sort option.", sort)
+        end
+        return PlayerSorterByLevel
+    end
 end
 
 -- Set the list of all players, indexed by their GUID
@@ -125,8 +147,9 @@ function SOFIA:SetTagPoolPlayer(player, isNew, updated)
         if #self.pool.chosen < self.pool.nbActiveTags then
             hereComesANewChallenger = true
         else
+            local playerSorter = GetPlayerSorter()
             for _, challenger in ipairs(self.pool.chosen) do
-                if PlayerSorter(player, challenger) then
+                if playerSorter(player, challenger) then
                     hereComesANewChallenger = true
                     break
                 end
@@ -181,7 +204,8 @@ function SOFIA:WriteCandidatesToTags(prechosen)
         end
     end
 
-    table.sort(self.pool.chosen, PlayerSorter)
+    local playerSorter = GetPlayerSorter()
+    table.sort(self.pool.chosen, playerSorter)
 
     if nbCandidates > nbActiveTags then
         -- Clamp the list if there are too many candidates
@@ -197,7 +221,7 @@ function SOFIA:WriteCandidatesToTags(prechosen)
         local player = self.pool.chosen[i]
         if player then
             local rank = i
-            if previousPlayer and not PlayerSorter(previousPlayer, player) then
+            if previousPlayer and not playerSorter(previousPlayer, player) then
                 -- Give same rank to consecutive players with same score
                 rank = previousRank
             end
