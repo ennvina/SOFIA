@@ -24,11 +24,17 @@ function SOFIA:CreateTag(window)
     local constants = self:GetConstants("tag")
     local sizeConstants = self:GetVariableConstants("tag", "size")
 
-    local titleHeight = self:GetConstants("title").barHeight
     local border = constants.border
-    tag:SetPoint("TOPLEFT", border, -titleHeight - index*sizeConstants.height - border)
+    if index == 0 then
+        local titleHeight = self:GetConstants("title").barHeight
+        tag:SetPoint("TOPLEFT", border, -titleHeight - border)
+    else
+        local tagAbove = window.tags[index] -- Because tables are indexed from 1, 'tags[index]' is the previous tag
+        local spacing = self:GetVariableConstants("tag", "spacing")
+        tag:SetPoint("TOPLEFT", tagAbove, "BOTTOMLEFT", 0, -spacing)
+    end
     tag:SetPoint("RIGHT", -border, 0)
-    tag:SetHeight(sizeConstants.height - 2*border)
+    tag:SetHeight(sizeConstants.height)
 
     local fgColor = self:GetColor(constants.fgColor)
     tag.texts = {}
@@ -72,16 +78,19 @@ function SOFIA:UpdateTagSize(window)
     local sizeConstants = self:GetVariableConstants("tag", "size")
     local titleHeight = self:GetConstants("title").barHeight
     local border = constants.border
+    local tagAbove = nil
 
-    for i, tag in ipairs(window and window.tags or {}) do
-        local index = i-1 -- table stores indexes from 1, but we need from 0
-
-        tag:SetPoint("TOPLEFT", border, -titleHeight - index*sizeConstants.height - border)
-        tag:SetPoint("RIGHT", -border, 0)
-        tag:SetHeight(sizeConstants.height - 2*border)
+    for _, tag in ipairs(window and window.tags or {}) do
+        if tagAbove then
+            local spacing = self:GetVariableConstants("tag", "spacing")
+            tag:SetPoint("TOPLEFT", tagAbove, "BOTTOMLEFT", 0, -spacing)
+        end
+        tag:SetHeight(sizeConstants.height)
 
         tag.texts.name :SetFontObject(sizeConstants.className)
         tag.texts.level:SetFontObject(sizeConstants.className)
+
+        tagAbove = tag
     end
 end
 

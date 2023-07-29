@@ -5,6 +5,7 @@
 - Settings button to open a settings popup menu
 - Option to sort by level or by recent level up
 - Option to set the font size / tag height
+- Option to set the spacing between tags
 
 #### v0.4.0-beta (2023-07-26)
 

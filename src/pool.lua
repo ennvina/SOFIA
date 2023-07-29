@@ -44,8 +44,9 @@ function SOFIA:RefreshTagPoolCount()
 
     local titleHeight = self:GetConstants("title").barHeight
     local tagHeight = self:GetVariableConstants("tag", "size").height
+    local spacing = self:GetVariableConstants("tag", "spacing")
     local windowHeight = self.window:GetHeight()
-    local nbActiveTags = math.floor((windowHeight-titleHeight)/tagHeight)
+    local nbActiveTags = math.floor((windowHeight-titleHeight)/(tagHeight+spacing))
 
     local poolCountChanged = nbActiveTags ~= self.pool.nbActiveTags
 

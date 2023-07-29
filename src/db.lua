@@ -47,23 +47,28 @@ SOFIA.constants = {
     tag = {
         size = {
             small = {
-                height = 14,
+                height = 12,
                 tooltipOffsetX = -79,
                 tooltipOffsetY = 23,
                 className = "GameFontNormalSmall",
             },
             medium = {
-                height = 18,
+                height = 16,
                 tooltipOffsetX = -80,
                 tooltipOffsetY = 25,
                 className = "GameFontNormal",
             },
             large = {
-                height = 24,
+                height = 22,
                 tooltipOffsetX = -82,
                 tooltipOffsetY = 28,
                 className = "GameFontNormalLarge",
             },
+        },
+        spacing = {
+            none = 0,
+            small = 1,
+            large = 2,
         },
         border = 1,
         marginLeft = 5,
@@ -136,6 +141,7 @@ SOFIA.defaults = {
     settings = {
         sort = "level",
         size = "medium",
+        spacing = "small",
     },
 }
 

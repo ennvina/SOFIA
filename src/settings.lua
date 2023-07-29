@@ -42,6 +42,24 @@ function SOFIA:SetSize(size)
     self:RefreshTagPoolCount()
 end
 
+function SOFIA:SetSpacing(spacing)
+    self:Debug("Setting spacing %s", spacing)
+
+    local config = self:GetSettingsConfig()
+    if config then
+        if config.spacing == spacing then
+            return -- Setting has not changed: nothing to do
+        end
+        config.spacing = spacing
+    else
+        self:Error("Cannot set size option %s", tostring(spacing))
+    end
+
+    -- Apply option to window and roster
+    self:UpdateTagSize(self:GetWindow())
+    self:RefreshTagPoolCount()
+end
+
 -- Open the settings popup menu
 function SOFIA:OpenSettings()
     if not self.window then
@@ -123,6 +141,41 @@ function SOFIA:OpenSettings()
                         self.window.settings = nil
                     end,
                     checked = config and config.size == "large",
+                },
+            }
+        },
+        -- Option to set the spacing between tags
+        {
+            text = "Spacing",
+            notCheckable = true,
+            hasArrow = true,
+            menuList = {
+                {
+                    text = NONE,
+                    func = function()
+                        self:SetSpacing("none")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.spacing == "none",
+                },
+                {
+                    text = SMALL,
+                    func = function()
+                        self:SetSpacing("small")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.spacing == "small",
+                },
+                {
+                    text = LARGE,
+                    func = function()
+                        self:SetSpacing("large")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.spacing == "large",
                 },
             }
         },
