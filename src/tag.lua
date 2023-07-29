@@ -46,7 +46,8 @@ function SOFIA:CreateTag(window)
             local level = tag.player.level
             local dateTime = self:HumanReadableDateTime(tag.player.lastLevelUp)
             local tooltip = string.format("Level |cffffff00%d|r since |cff808080at least|r |cffffff00%s|r", level, dateTime)
-            GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", sizeConstants.tooltipOffsetX, -sizeConstants.tooltipOffsetY)
+            local sc = self:GetVariableConstants("tag", "size")
+            GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", sc.tooltipOffsetX, -sc.tooltipOffsetY)
             GameTooltip_SetTitle(GameTooltip, tooltip)
             GameTooltip:Show()
         end
@@ -64,6 +65,24 @@ function SOFIA:CreateTag(window)
         table.insert(window.tags, tag)
     end
     return tag
+end
+
+function SOFIA:UpdateTagSize(window)
+    local constants = self:GetConstants("tag")
+    local sizeConstants = self:GetVariableConstants("tag", "size")
+    local titleHeight = self:GetConstants("title").barHeight
+    local border = constants.border
+
+    for i, tag in ipairs(window and window.tags or {}) do
+        local index = i-1 -- table stores indexes from 1, but we need from 0
+
+        tag:SetPoint("TOPLEFT", border, -titleHeight - index*sizeConstants.height - border)
+        tag:SetPoint("RIGHT", -border, 0)
+        tag:SetHeight(sizeConstants.height - 2*border)
+
+        tag.texts.name :SetFontObject(sizeConstants.className)
+        tag.texts.level:SetFontObject(sizeConstants.className)
+    end
 end
 
 function SOFIA:FillTag(index, player, rank)

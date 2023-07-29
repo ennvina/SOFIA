@@ -8,36 +8,38 @@ function SOFIA:GetSettingsConfig()
     end
 end
 
-local function SetSort(sort)
-    SOFIA:Debug("Setting sort %s", sort)
+function SOFIA:SetSort(sort)
+    self:Debug("Setting sort %s", sort)
 
-    local config = SOFIA:GetSettingsConfig()
+    local config = self:GetSettingsConfig()
     if config then
         if config.sort == sort then
             return -- Setting has not changed: nothing to do
         end
         config.sort = sort
     else
-        SOFIA:Error("Cannot set sort option %s", tostring(sort))
+        self:Error("Cannot set sort option %s", tostring(sort))
     end
 
     -- @todo apply option to window and roster
 end
 
-local function SetSize(size)
-    SOFIA:Debug("Setting size %s", size)
+function SOFIA:SetSize(size)
+    self:Debug("Setting size %s", size)
 
-    local config = SOFIA:GetSettingsConfig()
+    local config = self:GetSettingsConfig()
     if config then
         if config.size == size then
             return -- Setting has not changed: nothing to do
         end
         config.size = size
     else
-        SOFIA:Error("Cannot set size option %s", tostring(size))
+        self:Error("Cannot set size option %s", tostring(size))
     end
 
-    -- @todo apply option to window and roster
+    -- Apply option to window and roster
+    self:UpdateTagSize(self:GetWindow())
+    self:RefreshTagPoolCount()
 end
 
 -- Open the settings popup menu
@@ -65,7 +67,7 @@ function SOFIA:OpenSettings()
                 {
                     text = LEVEL,
                     func = function()
-                        SetSort("level")
+                        self:SetSort("level")
                         self.window.settings:Hide()
                         self.window.settings = nil
                     end,
@@ -78,7 +80,7 @@ function SOFIA:OpenSettings()
                 {
                     text = "Recent level up",
                     func = function()
-                        SetSort("recent")
+                        self:SetSort("recent")
                         self.window.settings:Hide()
                         self.window.settings = nil
                     end,
@@ -98,7 +100,7 @@ function SOFIA:OpenSettings()
                 {
                     text = SMALL,
                     func = function()
-                        SetSize("small")
+                        self:SetSize("small")
                         self.window.settings:Hide()
                         self.window.settings = nil
                     end,
@@ -107,7 +109,7 @@ function SOFIA:OpenSettings()
                 {
                     text = LARGE,
                     func = function()
-                        SetSize("large")
+                        self:SetSize("large")
                         self.window.settings:Hide()
                         self.window.settings = nil
                     end,
