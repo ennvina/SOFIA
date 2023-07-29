@@ -45,13 +45,23 @@ SOFIA.constants = {
     },
 
     tag = {
-        height = 24,
+        size = {
+            small = {
+                height = 16,
+                tooltipOffsetX = -78,
+                tooltipOffsetY = 24,
+                className = "GameFontNormalSmall",
+            },
+            large = {
+                height = 24,
+                tooltipOffsetX = -82,
+                tooltipOffsetY = 28,
+                className = "GameFontNormalLarge",
+            },
+        },
         border = 1,
         marginLeft = 5,
         marginRight = 10,
-        tooltipOffsetX = -82,
-        tooltipOffsetY = 28,
-        className = "GameFontNormalLarge",
         texCoord = {0, 0.97, 0, 1},
         texture = 'Interface\\RaidFrame\\Raid-Bar-Hp-Fill',
         fgColor = 'white',
@@ -65,6 +75,38 @@ function SOFIA:GetConstants(tag)
         self:Error("Unknown constant tag '%s'.", tag)
         return {}
     end
+end
+
+function SOFIA:GetVariableConstants(tag, setting)
+    local constants = self.constants[tag]
+    if not constants then
+        self:Error("Unknown constant tag '%s'.", tag)
+        return {}
+    end
+
+    local settings = constants[setting]
+    if not settings then
+        self:Error("Unknown constant settings '%s' for tag '%s'.", setting, tag)
+        return {}
+    end
+
+    local settingsConfig = self:GetSettingsConfig()
+    if not settingsConfig then
+        self:Error("Settings not initialized yet.")
+        return {}
+    end
+
+    local userSetting = settingsConfig[setting]
+    if type(userSetting) == 'nil' then
+        self:Debug("User has no settings for '%s', using default setting instead.", setting)
+        userSetting = self.defaults.settings[setting]
+        if type(userSetting) == 'nil' then
+            self:Debug("There is no default setting for '%s'.", setting)
+            return {}
+        end
+    end
+
+    return settings[userSetting]
 end
 
 -- Values for ver first loading, or for resetting

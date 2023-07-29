@@ -1,7 +1,7 @@
 local AddonName, SOFIA = ...
 
-local function CreateText(parent, constants, side)
-    local text = parent:CreateFontString("ARTWORK", nil, constants.className)
+local function CreateText(parent, constants, sizeConstants, side)
+    local text = parent:CreateFontString("ARTWORK", nil, sizeConstants.className)
 
     if side == "LEFT" then
         text:SetPoint("LEFT", constants.marginLeft, 0)
@@ -22,17 +22,18 @@ function SOFIA:CreateTag(window)
     local index = #window.tags -- Index starts at 0
     local tag = CreateFrame("Frame", nil, window)
     local constants = self:GetConstants("tag")
+    local sizeConstants = self:GetVariableConstants("tag", "size")
 
     local titleHeight = self:GetConstants("title").barHeight
     local border = constants.border
-    tag:SetPoint("TOPLEFT", border, -titleHeight - index*constants.height - border)
+    tag:SetPoint("TOPLEFT", border, -titleHeight - index*sizeConstants.height - border)
     tag:SetPoint("RIGHT", -border, 0)
-    tag:SetHeight(constants.height - 2*border)
+    tag:SetHeight(sizeConstants.height - 2*border)
 
     local fgColor = self:GetColor(constants.fgColor)
     tag.texts = {}
-    tag.texts.name  = CreateText(tag, constants, "LEFT")
-    tag.texts.level = CreateText(tag, constants, "RIGHT")
+    tag.texts.name  = CreateText(tag, constants, sizeConstants, "LEFT")
+    tag.texts.level = CreateText(tag, constants, sizeConstants, "RIGHT")
     tag.texts.name:SetPoint("RIGHT", tag.texts.level, "LEFT")
 
     tag.texture = tag:CreateTexture(nil, "ARTWORK")
@@ -45,7 +46,7 @@ function SOFIA:CreateTag(window)
             local level = tag.player.level
             local dateTime = self:HumanReadableDateTime(tag.player.lastLevelUp)
             local tooltip = string.format("Level |cffffff00%d|r since |cff808080at least|r |cffffff00%s|r", level, dateTime)
-            GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", constants.tooltipOffsetX, -constants.tooltipOffsetY)
+            GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", sizeConstants.tooltipOffsetX, -sizeConstants.tooltipOffsetY)
             GameTooltip_SetTitle(GameTooltip, tooltip)
             GameTooltip:Show()
         end
