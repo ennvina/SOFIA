@@ -1,5 +1,11 @@
 ## SOFIA Changelog
 
+#### v0.5.0-beta (2023-07-29)
+
+- Settings button to open a settings popup menu
+- Option to sort by level or by recent level up
+- Option to set the font size / tag height
+
 #### v0.4.0-beta (2023-07-26)
 
 - After more tests, the addon is ready to enter its Beta phase

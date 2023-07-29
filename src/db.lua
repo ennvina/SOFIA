@@ -83,11 +83,17 @@ SOFIA.defaults = {
     roster = {
         _whereis = {},
     },
+
+    -- User-defined options
+    settings = {
+        sort = "level",
+        size = "large",
+    },
 }
 
 -- Load database and use default values if needed
 function SOFIA:LoadDB()
-    local currentversion = 020
+    local currentversion = 050
     local db = SOFIADB or {}
 
     if type(db.debug) ~= 'boolean' then
@@ -102,6 +108,10 @@ function SOFIA:LoadDB()
         db.roster = self.defaults.roster
     end
 
+    if not db.settings then
+        db.settings = self.defaults.settings
+    end
+
     db.version = currentversion
     SOFIADB = db
     self.db = db
@@ -109,8 +119,8 @@ end
 
 -- Apply all settings after loading or on-the-fly
 function SOFIA:ApplySettings()
-    self:ApplyWindowSettings(self.db.window)
-    self:ApplyRosterSettings(self.db.roster)
+    self:ApplyWindowSettings()
+    self:ApplyRosterSettings()
 end
 
 -- Utility frame dedicated to react to variable loading

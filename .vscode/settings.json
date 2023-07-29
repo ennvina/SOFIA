@@ -29,6 +29,11 @@
         "UnitIsUnit",
         "date",
         "C_DateAndTime",
-        "GetServerTime"
+        "GetServerTime",
+        "SETTINGS",
+        "SMALL",
+        "LARGE",
+        "EasyMenu",
+        "CLOSE"
     ]
 }

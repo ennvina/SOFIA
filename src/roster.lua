@@ -250,6 +250,6 @@ function SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, d
     return isNew, updated
 end
 
-function SOFIA:ApplyRosterSettings(_roster)
-    roster = _roster
+function SOFIA:ApplyRosterSettings()
+    roster = self.db.roster
 end

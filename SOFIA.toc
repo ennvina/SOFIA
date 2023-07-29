@@ -1,8 +1,8 @@
 ## Interface: 11403
-## Title: SOFIA |cffb200000.4.0-beta|r
+## Title: SOFIA |cffb200000.5.0-beta|r
 ## Notes: Speedrun Observer Following Incredible Avatars
 ## Author: Ennvina
-## Version: 0.4.0-beta
+## Version: 0.5.0-beta
 
 ## X-Category: Leveling,Guild
 
@@ -16,5 +16,6 @@ src\main.lua
 src\myself.lua
 src\pool.lua
 src\roster.lua
+src\settings.lua
 src\tag.lua
 src\time.lua

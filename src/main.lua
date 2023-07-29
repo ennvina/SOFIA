@@ -51,7 +51,7 @@ SlashCmdList.SOFIA = function(msg, editBox)
         printChat("Commands:"..
         "\n".."show: show the window"..
         "\n".."hide: hide the window"..
-        "\n".."reset: reset to default settings"..
+        "\n".."reset: reset to window position and size"..
         "\n".."delete: wipe all roster data on all realms")
     end
 end
