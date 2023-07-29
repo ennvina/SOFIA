@@ -47,15 +47,15 @@ SOFIA.constants = {
     tag = {
         size = {
             small = {
-                height = 16,
-                tooltipOffsetX = -78,
-                tooltipOffsetY = 24,
+                height = 14,
+                tooltipOffsetX = -79,
+                tooltipOffsetY = 23,
                 className = "GameFontNormalSmall",
             },
             medium = {
-                height = 20,
+                height = 18,
                 tooltipOffsetX = -80,
-                tooltipOffsetY = 26,
+                tooltipOffsetY = 25,
                 className = "GameFontNormal",
             },
             large = {
