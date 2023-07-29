@@ -8,6 +8,22 @@ function SOFIA:GetSettingsConfig()
     end
 end
 
+local function SetSort(sort)
+    SOFIA:Debug("Setting sort %s", sort)
+
+    local config = SOFIA:GetSettingsConfig()
+    if config then
+        if config.sort == sort then
+            return -- Setting has not changed: nothing to do
+        end
+        config.sort = sort
+    else
+        SOFIA:Error("Cannot set sort option %s", tostring(sort))
+    end
+
+    -- @todo apply option to window and roster
+end
+
 local function SetSize(size)
     SOFIA:Debug("Setting size %s", size)
 
@@ -40,6 +56,32 @@ function SOFIA:OpenSettings()
     local config = self:GetSettingsConfig()
 
     local menu = {
+        -- Option to sort by different value
+        {
+            text = "Sort",
+            notCheckable = true,
+            hasArrow = true,
+            menuList = {
+                {
+                    text = LEVEL,
+                    func = function()
+                        SetSort("level")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.sort == "level",
+                },
+                {
+                    text = "Recent level up",
+                    func = function()
+                        SetSort("recent")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.sort == "recent",
+                },
+            }
+        },
         -- Option to set the font size and tag height
         {
             text = "Size",

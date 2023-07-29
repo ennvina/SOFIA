@@ -34,6 +34,7 @@
         "SMALL",
         "LARGE",
         "EasyMenu",
-        "CLOSE"
+        "CLOSE",
+        "LEVEL"
     ]
 }
