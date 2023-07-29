@@ -70,6 +70,10 @@ function SOFIA:OpenSettings()
                         self.window.settings = nil
                     end,
                     checked = config and config.sort == "level",
+                    tooltipOnButton = true,
+                    tooltipTitle = "Sort by player level",
+                    tooltipText = "Players with the highest level appear on top. "..
+                        "When two players have the same level, the one who leveled up first appears on top.",
                 },
                 {
                     text = "Recent level up",
@@ -79,6 +83,9 @@ function SOFIA:OpenSettings()
                         self.window.settings = nil
                     end,
                     checked = config and config.sort == "recent",
+                    tooltipOnButton = true,
+                    tooltipTitle = "Sort by most recent level up",
+                    tooltipText = "Players who leveled up recently appear on top."
                 },
             }
         },
