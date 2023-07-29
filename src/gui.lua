@@ -156,12 +156,12 @@ local function createTitleButtons(baseFrame)
             texCoord = {0.08, 0.9, 0.1, 0.9},
             -- tooltip = CLOSE, -- No need a tooltip, everyone knows what a close button is
         },
-        -- Settings button, disabled for now because there are no options yet
-        -- {
-        --     texture = 'Interface/GossipFrame/BinderGossipIcon',
-        --     callback = SOFIA.ToggleSettings,
-        --     tooltip = SETTINGS,
-        -- },
+        -- Settings button
+        {
+            texture = 'Interface/GossipFrame/BinderGossipIcon',
+            callback = function() SOFIA:OpenSettings() end,
+            tooltip = SETTINGS,
+        },
     }
 
     local position = 5
