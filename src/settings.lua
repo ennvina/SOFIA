@@ -107,6 +107,15 @@ function SOFIA:OpenSettings()
                     checked = config and config.size == "small",
                 },
                 {
+                    text = "Medium",
+                    func = function()
+                        self:SetSize("medium")
+                        self.window.settings:Hide()
+                        self.window.settings = nil
+                    end,
+                    checked = config and config.size == "medium",
+                },
+                {
                     text = LARGE,
                     func = function()
                         self:SetSize("large")

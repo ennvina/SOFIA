@@ -52,6 +52,12 @@ SOFIA.constants = {
                 tooltipOffsetY = 24,
                 className = "GameFontNormalSmall",
             },
+            medium = {
+                height = 20,
+                tooltipOffsetX = -80,
+                tooltipOffsetY = 26,
+                className = "GameFontNormal",
+            },
             large = {
                 height = 24,
                 tooltipOffsetX = -82,
@@ -129,7 +135,7 @@ SOFIA.defaults = {
     -- User-defined options
     settings = {
         sort = "level",
-        size = "large",
+        size = "medium",
     },
 }
 
