@@ -8,12 +8,23 @@ end
 
 -- Get GetServerTimeLocal() with the precision of GetServerTime()
 -- Reminder: GetServerTimeLocal() is only refreshed every 60 secs
-function SOFIA:GetCurrentTime()
+local function GetCurrentTime()
     if timeOffset then
         return GetServerTime() + timeOffset
     else
         return C_DateAndTime.GetServerTimeLocal()
     end
+end
+
+local timeAtLogin = GetCurrentTime()
+
+function SOFIA:GetCurrentTime()
+    return GetCurrentTime()
+end
+
+-- Return the number of secs since login or since reload ui
+function SOFIA:ElapsedSinceLogin()
+    return self:GetCurrentTime() - timeAtLogin
 end
 
 function SOFIA:HumanReadableDateTime(serverTime)

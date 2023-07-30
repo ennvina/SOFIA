@@ -1,5 +1,9 @@
 ## SOFIA Changelog
 
+#### v0.5.1-beta (2023-07-30)
+
+- Omit the 'at least' detail when we witnessed a level up
+
 #### v0.5.0-beta (2023-07-29)
 
 - Settings button to open a settings popup menu

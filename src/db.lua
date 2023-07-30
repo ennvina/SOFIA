@@ -147,7 +147,7 @@ SOFIA.defaults = {
 
 -- Load database and use default values if needed
 function SOFIA:LoadDB()
-    local currentversion = 050
+    local currentversion = 051
     local db = SOFIADB or {}
 
     if type(db.debug) ~= 'boolean' then

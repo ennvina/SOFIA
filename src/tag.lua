@@ -51,7 +51,8 @@ function SOFIA:CreateTag(window)
         if tag.player then
             local level = tag.player.level
             local dateTime = self:HumanReadableDateTime(tag.player.lastLevelUp)
-            local tooltip = string.format("Level |cffffff00%d|r since |cff808080at least|r |cffffff00%s|r", level, dateTime)
+            local atLeast = tag.player.levelUpTimeReliable and "" or "|cff808080at least|r "
+            local tooltip = string.format("Level |cffffff00%d|r since %s|cffffff00%s|r", level, atLeast, dateTime)
             local sc = self:GetVariableConstants("tag", "size")
             GameTooltip:SetOwner(tag, "ANCHOR_RIGHT", sc.tooltipOffsetX, -sc.tooltipOffsetY)
             GameTooltip_SetTitle(GameTooltip, tooltip)

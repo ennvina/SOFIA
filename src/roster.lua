@@ -32,6 +32,12 @@ function SOFIA:GetPlayerByGUID(guid)
     return rrg and rrg[guid] or nil
 end
 
+-- Try to guess if things are detected in real time
+-- or they were detected when we were disconnected
+local function IsTimeReliable()
+    return SOFIA:ElapsedSinceLogin() > 30
+end
+
 -- Create a new player, return it and return its update status
 local function CreatePlayer(guid, realm, name, class, guild, level, progress, dead)
     local time = SOFIA:GetCurrentTime()
@@ -50,6 +56,7 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
         level = level,
         progress = progress,
         lastLevelUp = time,
+        levelUpTimeReliable = IsTimeReliable(),
 
         -- Death status
         dead = dead,
@@ -74,7 +81,8 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
         -- Level
         level = true,
         progress = true,
-        -- Do not track 'lastLevelUp' updates, we know it gets updated alongside 'level'
+        -- Do not track 'lastLevelUp' nor 'levelUpTimeReliable' updates
+        -- Because we know they get updated alongside 'level'
 
         -- Death status
         dead = true,
@@ -132,6 +140,7 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
         -- When the level changes, update it and remember when it happened
         UpdateField(player, 'level', level, 'leveled up', updated)
         player.lastLevelUp = time -- Overwrite lastLevelUp, but do not advertise it
+        player.levelUpTimeReliable = IsTimeReliable() -- Overwrite, but do not advertise
         player.progress = -1 -- Progress is unknown upon level up; may be overwritten below
         updated.progress = true -- Also tell progress gets updated, silently
     end
@@ -193,8 +202,8 @@ end
 
 -- Add or update player info
 -- Returns if player has been added, and which fields of player have been updated
--- Do not tell when times (lastLevelUp or lastSeen) have been updated, because:
--- - lastLevelUp can be guessed when level gets updated
+-- Do not tell when lastLevelUp, levelUpTimeReliable or lastSeen have been updated, because:
+-- - lastLevelUp and levelUpTimeReliable can be guessed when level gets updated
 -- - lastSeen is always updated
 function SOFIA:SetPlayerInfo(guid, realm, name, class, guild, level, progress, dead)
     if not realm then realm = "" end
