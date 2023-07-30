@@ -56,7 +56,7 @@ local function CreatePlayer(guid, realm, name, class, guild, level, progress, de
         level = level,
         progress = progress,
         lastLevelUp = time,
-        levelUpTimeReliable = IsTimeReliable(),
+        levelUpTimeReliable = false, -- We don't know for how long the player had this level
 
         -- Death status
         dead = dead,
