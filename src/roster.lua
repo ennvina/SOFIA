@@ -35,7 +35,7 @@ end
 -- Try to guess if things are detected in real time
 -- or they were detected when we were disconnected
 local function IsTimeReliable()
-    return SOFIA:ElapsedSinceLogin() > 30
+    return SOFIA:ElapsedSinceLogin() > 15
 end
 
 -- Create a new player, return it and return its update status
