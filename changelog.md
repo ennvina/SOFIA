@@ -5,6 +5,7 @@
 - Omit the 'at least' detail when we witnessed a level up
 - Can now reset the window multiple times with /sofia reset
 - Can now purge roster data multiple times with /sofia delete
+- Level up date and time now come from GetServerTime()
 - Fixed almost impercetible rendering issues
 
 #### v0.5.0-beta (2023-07-29)

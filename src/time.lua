@@ -1,25 +1,9 @@
 local AddonName, SOFIA = ...
 
-local timeOffset = 3600 * math.floor(0.5+(C_DateAndTime.GetServerTimeLocal()-GetServerTime())/3600)
-if timeOffset < -12*3600 or timeOffset > 12*3600 or timeOffset == 0 then
-    -- Security in case timeOffset computation failed
-    timeOffset = nil
-end
-
--- Get GetServerTimeLocal() with the precision of GetServerTime()
--- Reminder: GetServerTimeLocal() is only refreshed every 60 secs
-local function GetCurrentTime()
-    if timeOffset then
-        return GetServerTime() + timeOffset
-    else
-        return C_DateAndTime.GetServerTimeLocal()
-    end
-end
-
-local timeAtLogin = GetCurrentTime()
+local timeAtLogin = GetServerTime()
 
 function SOFIA:GetCurrentTime()
-    return GetCurrentTime()
+    return GetServerTime()
 end
 
 -- Return the number of secs since login or since reload ui
