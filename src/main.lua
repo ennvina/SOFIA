@@ -26,11 +26,11 @@ end
 
 SlashCmdList.SOFIA = function(msg, editBox)
     if msg == "reset" then
-        SOFIA.db.window = SOFIA.defaults.window
+        SOFIA.db.window = CopyTable(SOFIA.defaults.window)
         SOFIA:ApplySettings()
         printChat("Options have been reset.")
     elseif msg == "delete" then
-        SOFIA.db.roster = SOFIA.defaults.roster
+        SOFIA.db.roster = CopyTable(SOFIA.defaults.roster)
         if SOFIA.window and SOFIA.window:IsShown() then
             SOFIA:SetTagPoolPlayers({})
         end

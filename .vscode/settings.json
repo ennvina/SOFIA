@@ -36,6 +36,7 @@
         "EasyMenu",
         "CLOSE",
         "LEVEL",
-        "NONE"
+        "NONE",
+        "CopyTable"
     ]
 }

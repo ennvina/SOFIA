@@ -150,15 +150,15 @@ function SOFIA:LoadDB()
     end
 
     if not db.window then
-        db.window = self.defaults.window
+        db.window = CopyTable(self.defaults.window)
     end
 
     if not db.roster then
-        db.roster = self.defaults.roster
+        db.roster = CopyTable(self.defaults.roster)
     end
 
     if not db.settings then
-        db.settings = self.defaults.settings
+        db.settings = CopyTable(self.defaults.settings)
     end
 
     db.version = currentversion
