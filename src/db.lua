@@ -45,6 +45,7 @@ SOFIA.constants = {
     },
 
     tag = {
+        border = 1,
         size = {
             small = {
                 height = 12,
@@ -70,12 +71,6 @@ SOFIA.constants = {
             small = 1,
             large = 2,
         },
-        border = 1,
-        marginLeft = 5,
-        marginRight = 10,
-        texCoord = {0, 0.97, 0, 1},
-        texture = 'Interface\\RaidFrame\\Raid-Bar-Hp-Fill',
-        fgColor = 'white',
     },
 }
 function SOFIA:GetConstants(tag)

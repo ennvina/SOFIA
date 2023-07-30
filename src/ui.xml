@@ -1,0 +1,37 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Frame name="SOFIA_TagTemplate" virtual="true">
+    <Layers>
+      <Layer level="ARTWORK">
+
+        <!-- Background texture -->
+        <Texture name="$parentTexture" parentKey="texture" file="Interface\RaidFrame\Raid-Bar-Hp-Fill">
+          <TexCoords right="0.97"/><!-- Clamp horinzontally because Raid-Bar-Hp-Fill 'leaks' on rightmost pixels -->
+        </Texture>
+
+        <!-- Label for the player level, displayed on the right -->
+        <FontString name="$parentLevelLabel" parentKey="levelLabel" justifyH="RIGHT">
+          <Color r="1" g="1" b="1"/>
+          <Anchors>
+            <Anchor point="RIGHT">
+              <AbsDimension x="-10" y="0"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+
+        <!-- Label for the player rank and name, displayed on the left -->
+        <FontString name="$parentNameLabel" parentKey="nameLabel" justifyH="LEFT">
+          <Color r="1" g="1" b="1"/>
+          <Anchors>
+            <Anchor point="LEFT">
+              <AbsDimension x="5" y="0"/>
+            </Anchor>
+            <!-- Clamp the text so that it doesn't overlap with level -->
+            <Anchor point="RIGHT" relativeTo="$parentLevelLabel" relativePoint="LEFT"/>
+          </Anchors>
+        </FontString>
+
+      </Layer>
+    </Layers>
+  </Frame>
+</Ui>

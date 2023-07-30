@@ -1,26 +1,12 @@
 local AddonName, SOFIA = ...
 
-local function CreateText(parent, constants, sizeConstants, side)
-    local text = parent:CreateFontString("ARTWORK", nil, sizeConstants.className)
-
-    if side == "LEFT" then
-        text:SetPoint("LEFT", constants.marginLeft, 0)
-        text:SetJustifyH("LEFT")
-    else
-        text:SetPoint("RIGHT", -constants.marginRight, 0)
-        text:SetJustifyH("RIGHT")
-    end
-    text:SetTextColor(SOFIA:GetColor(constants.fgColor):GetRGB())
-
-    return text
-end
-
 function SOFIA:CreateTag(window)
     if not window.tags then
         window.tags = {}
     end
     local index = #window.tags -- Index starts at 0
-    local tag = CreateFrame("Frame", nil, window)
+    local tag = CreateFrame("Frame", nil, window, "SOFIA_TagTemplate")
+
     local constants = self:GetConstants("tag")
     local sizeConstants = self:GetVariableConstants("tag", "size")
 
@@ -36,16 +22,8 @@ function SOFIA:CreateTag(window)
     tag:SetPoint("RIGHT", -border, 0)
     tag:SetHeight(sizeConstants.height)
 
-    local fgColor = self:GetColor(constants.fgColor)
-    tag.texts = {}
-    tag.texts.name  = CreateText(tag, constants, sizeConstants, "LEFT")
-    tag.texts.level = CreateText(tag, constants, sizeConstants, "RIGHT")
-    tag.texts.name:SetPoint("RIGHT", tag.texts.level, "LEFT")
-
-    tag.texture = tag:CreateTexture(nil, "ARTWORK")
-    tag.texture:SetTexCoord(unpack(constants.texCoord))
-    tag.texture:SetTexture(constants.texture)
-    tag.texture:SetAllPoints()
+    tag.nameLabel:SetFontObject(sizeConstants.className)
+    tag.levelLabel:SetFontObject(sizeConstants.className)
 
     tag:SetScript("OnEnter", function()
         if tag.player then
@@ -75,10 +53,7 @@ function SOFIA:CreateTag(window)
 end
 
 function SOFIA:UpdateTagSize(window)
-    local constants = self:GetConstants("tag")
     local sizeConstants = self:GetVariableConstants("tag", "size")
-    local titleHeight = self:GetConstants("title").barHeight
-    local border = constants.border
     local tagAbove = nil
 
     for _, tag in ipairs(window and window.tags or {}) do
@@ -88,8 +63,8 @@ function SOFIA:UpdateTagSize(window)
         end
         tag:SetHeight(sizeConstants.height)
 
-        tag.texts.name :SetFontObject(sizeConstants.className)
-        tag.texts.level:SetFontObject(sizeConstants.className)
+        tag.nameLabel :SetFontObject(sizeConstants.className)
+        tag.levelLabel:SetFontObject(sizeConstants.className)
 
         tagAbove = tag
     end
@@ -106,11 +81,11 @@ function SOFIA:FillTag(index, player, rank)
     tag.texture:SetVertexColor(r, g, b, 1)
 
     if rank then
-        tag.texts.name:SetText(tostring(rank or index)..". "..player.name)
+        tag.nameLabel:SetText(tostring(rank or index)..". "..player.name)
     else
-        tag.texts.name:SetText(player.name)
+        tag.nameLabel:SetText(player.name)
     end
-    tag.texts.level:SetText(tostring(player.level))
+    tag.levelLabel:SetText(tostring(player.level))
 
     tag.player = player
 end
@@ -125,8 +100,8 @@ function SOFIA:EmptyTag(index)
     -- Set it fully transparent
     tag.texture:SetVertexColor(0, 0, 0, 0)
 
-    tag.texts.name:SetText("")
-    tag.texts.level:SetText("")
+    tag.nameLabel:SetText("")
+    tag.levelLabel:SetText("")
 
     tag.player = nil
 end

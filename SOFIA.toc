@@ -19,3 +19,4 @@ src\roster.lua
 src\settings.lua
 src\tag.lua
 src\time.lua
+src\ui.xml
