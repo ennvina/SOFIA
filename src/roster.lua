@@ -28,6 +28,7 @@ function SOFIA:GetPlayerByGUID(guid)
         return nil
     end
 
+    -- rrg stands for Roster-Realm-Guild
     local rrg = self:GetRoster(location.realm, location.guild)
     return rrg and rrg[guid] or nil
 end
@@ -35,7 +36,7 @@ end
 -- Try to guess if things are detected in real time
 -- or they were detected when we were disconnected
 local function IsTimeReliable()
-    return SOFIA:ElapsedSinceLogin() > 15
+    return SOFIA.timeIsReliable or SOFIA:ElapsedSinceLogin() > 60
 end
 
 -- Create a new player, return it and return its update status

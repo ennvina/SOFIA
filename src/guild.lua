@@ -44,6 +44,11 @@ local function UpdateAllGuild()
             SOFIA:RemoveTagPoolPlayer(player.guid)
         end
     end
+
+    if nbGuildmates > 0 then
+        -- Once guild has been recognized at least once, time reliability should always be OK
+        SOFIA.timeIsReliable = true
+    end
 end
 
 local guildTimerFrame = CreateFrame("Frame", AddonName.."_GuildTimer")
