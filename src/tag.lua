@@ -10,7 +10,7 @@ function SOFIA:CreateTag(window)
     local constants = self:GetConstants("tag")
     local sizeConstants = self:GetVariableConstants("tag", "size")
 
-    local border = constants.border
+    local border = constants and constants.border or 0
     if index == 0 then
         local titleHeight = self:GetConstants("title").barHeight
         tag:SetPoint("TOPLEFT", border, -titleHeight - border)
