@@ -106,7 +106,7 @@ function SOFIA:FillTag(index, player, rank)
     tag.texture:SetVertexColor(r, g, b, 1)
 
     if rank then
-        tag.texts.name:SetText(tostring(rank or index)..". "..player.name)
+        tag.texts.name:SetText(tostring(rank or index)..". "..player.name)
     else
         tag.texts.name:SetText(player.name)
     end
