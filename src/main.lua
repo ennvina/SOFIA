@@ -12,6 +12,11 @@ local function printChat(pattern, ...)
     printColor(color, pattern, ...)
 end
 
+function SOFIA:Info(pattern, ...)
+    local hcColor = "FFB20000" -- Do not fetch from SOFIA:GetColorHex to minimize calls during errors
+    print(YELLOW_FONT_COLOR:WrapTextInColorCode(string.format('|c%s%s|r: '..pattern, hcColor, AddonName, unpack{...})))
+end
+
 function SOFIA:Error(pattern, ...)
     local hcColor = "FFB20000" -- Do not fetch from SOFIA:GetColorHex to minimize calls during errors
     print(string.format('|c%s%s|r: '..pattern, hcColor, AddonName, unpack{...}))

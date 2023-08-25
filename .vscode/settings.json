@@ -37,6 +37,8 @@
         "CLOSE",
         "LEVEL",
         "NONE",
-        "CopyTable"
+        "CopyTable",
+        "YELLOW_FONT_COLOR",
+        "GUILD_NEWS_FORMAT6"
     ]
 }

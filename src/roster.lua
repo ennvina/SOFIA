@@ -144,6 +144,11 @@ local function UpdatePlayer(player, guid, realm, name, class, guild, level, prog
         player.levelUpTimeReliable = IsTimeReliable() -- Overwrite, but do not advertise
         player.progress = -1 -- Progress is unknown upon level up; may be overwritten below
         updated.progress = true -- Also tell progress gets updated, silently
+        -- Special case every 10 levels: write level up info in the chat
+        if level % 10 == 0 and IsTimeReliable() then
+            local playerLink = string.format("|Hplayer:%s|h[%s]|h", player.name, player.name)
+            SOFIA:Info(GUILD_NEWS_FORMAT6, playerLink, player.level)
+        end
     end
     if progress ~= player.progress and progress >= 0 then -- Player sub-level may change frequently
         UpdateField(player, 'progress', progress, nil, updated)
