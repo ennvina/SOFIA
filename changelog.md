@@ -1,5 +1,9 @@
 ## SOFIA Changelog
 
+#### v0.6.1-beta (2023-08-xx)
+
+- List order is more stable when two players have a strictly similar rank
+
 #### v0.6.0-beta (2023-08-25)
 
 - Write in the chat when a guild player levels up every 10 levels

@@ -74,12 +74,22 @@ local function PlayerSorterByLevel(a, b)
 
     -- Levels are different
     -- The best one is the one with highest level
-    return a.level > b.level
+    if a.level ~= b.level then
+        return a.level > b.level
+    end
+
+    -- Last resort if rank is stricltly similar: rank by name
+    return a.name < b.name
 end
 
 local function PlayerSorterByRecentLevelUp(a, b)
     -- The best players are the ones who leveled up last
-    return a.lastLevelUp > b.lastLevelUp
+    if a.lastLevelUp ~= b.lastLevelUp then
+        return a.lastLevelUp > b.lastLevelUp
+    end
+
+    -- Last resort if rank is stricltly similar: rank by name
+    return a.name < b.name
 end
 
 local function GetPlayerSorter()
