@@ -11,8 +11,6 @@ local AddonName, SOFIA = ...
 local classMap = {}
 
 local function UpdateAllFriends()
-    C_FriendList.ShowFriends() -- Try to trigger a friend list update (may get answer next time)
-
     local realm = GetRealmName() or ""
     local nbFriends = C_FriendList and C_FriendList.GetNumFriends() or 0
 
