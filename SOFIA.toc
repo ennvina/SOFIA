@@ -1,8 +1,8 @@
 ## Interface: 11404
-## Title: SOFIA |cffb200000.6.1-beta|r
+## Title: SOFIA |cffb200000.7.0-beta|r
 ## Notes: Speedrun Observer Following Incredible Avatars
 ## Author: Ennvina
-## Version: 0.6.1-beta
+## Version: 0.7.0-beta
 
 ## X-Category: Leveling,Guild
 
@@ -10,6 +10,7 @@
 ## SavedVariables: SOFIADB
 
 src\db.lua
+src\friend.lua
 src\gui.lua
 src\guild.lua
 src\main.lua

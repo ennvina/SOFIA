@@ -206,6 +206,16 @@ function SOFIA:FindPlayerByGUID(guid)
     return nil
 end
 
+function SOFIA:GetPlayerGuild(guid)
+    local location = roster._whereis and roster._whereis[guid]
+    if location and location.guild then
+        return location.guild
+    end
+
+    location = self:FindPlayerByGUID(guid)
+    return location and location.guild
+end
+
 -- Add or update player info
 -- Returns if player has been added, and which fields of player have been updated
 -- Do not tell when lastLevelUp, levelUpTimeReliable or lastSeen have been updated, because:

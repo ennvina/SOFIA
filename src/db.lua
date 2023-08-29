@@ -192,6 +192,7 @@ loader:SetScript("OnEvent", function (event)
 
     -- Good practice to query player information only when roster is linked to db
     SOFIA:StartGuildTimer()
+    SOFIA:StartFriendTimer()
     SOFIA:StartMyselfTimer()
 
 --    SOFIAOptionsPanel_Init(SOFIA.OptionsPanel)

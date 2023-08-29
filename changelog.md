@@ -1,5 +1,11 @@
 ## SOFIA Changelog
 
+#### v0.7.0-beta (2023-08-28)
+
+- Friends of your realm's friend list are tracked
+- Please note, there is a limitation due to how the game handles friend list
+- Friend levels are updated only when you log in or when they log in
+
 #### v0.6.1-beta (2023-08-27)
 
 - List order is more stable when two players have a strictly similar rank

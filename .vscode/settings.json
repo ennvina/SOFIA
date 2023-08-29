@@ -39,6 +39,9 @@
         "NONE",
         "CopyTable",
         "YELLOW_FONT_COLOR",
-        "GUILD_NEWS_FORMAT6"
+        "GUILD_NEWS_FORMAT6",
+        "C_FriendList",
+        "GetNumClasses",
+        "GetClassInfo"
     ]
 }
