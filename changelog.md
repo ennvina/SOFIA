@@ -1,6 +1,6 @@
 ## SOFIA Changelog
 
-#### v0.6.1-beta (2023-08-xx)
+#### v0.6.1-beta (2023-08-27)
 
 - List order is more stable when two players have a strictly similar rank
 
