@@ -33,7 +33,6 @@
         "SETTINGS",
         "SMALL",
         "LARGE",
-        "EasyMenu",
         "CLOSE",
         "LEVEL",
         "NONE",
@@ -42,6 +41,9 @@
         "GUILD_NEWS_FORMAT6",
         "C_FriendList",
         "GetNumClasses",
-        "GetClassInfo"
+        "GetClassInfo",
+        "UIDropDownMenu_AddButton",
+        "UIDropDownMenu_Initialize",
+        "ToggleDropDownMenu"
     ]
 }

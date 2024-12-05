@@ -191,5 +191,5 @@ function SOFIA:OpenSettings()
         },
     }
 
-    EasyMenu(menu, self.window.settings, "cursor", 0, 0, "MENU")
+    SOFIA.EasyMenu(menu, self.window.settings, "cursor", 0, 0, "MENU")
 end

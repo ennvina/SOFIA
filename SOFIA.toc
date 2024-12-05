@@ -9,6 +9,7 @@
 ## DefaultState: enabled
 ## SavedVariables: SOFIADB
 
+src\easymenu.lua
 src\db.lua
 src\friend.lua
 src\gui.lua
