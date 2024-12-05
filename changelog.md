@@ -1,5 +1,9 @@
 ## SOFIA Changelog
 
+#### v0.7.1-beta (2024-12-05)
+
+- Fixed settings menu which was broken because of EasyMenu removal
+
 #### v0.7.0-beta (2023-08-28)
 
 - Friends of your realm's friend list are tracked
